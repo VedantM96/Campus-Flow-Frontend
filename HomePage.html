@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <title>CampusFlow — AI-Powered Campus Recruitment</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js">
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    // Tailwind configuration
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              950: '#020918',
+              900: '#050B18',
+              800: '#0A1628',
+              700: '#0F1F38',
+              600: '#162844',
+            },
+            surface: {
+              DEFAULT: '#0F1729',
+              2: '#131E33',
+              3: '#18263D',
+              4: '#1E2E48',
+            },
+            brand: {
+              indigo: '#6366F1',
+              purple: '#8B5CF6',
+              teal: '#14B8A6',
+              cyan: '#06B6D4',
+              pink: '#EC4899',
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.4s ease-out',
+            'slide-up': 'slideUp 0.35s cubic-bezier(0.16,1,0.3,1)',
+            'slide-in-right': 'slideInRight 0.35s cubic-bezier(0.16,1,0.3,1)',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4,0,0.6,1) infinite',
+            'spin-slow': 'spin 3s linear infinite',
+            'bounce-light': 'bounceLight 1s ease-in-out infinite',
+            'gradient': 'gradientShift 8s ease infinite',
+            'confetti-fall': 'confettiFall 2s ease-in forwards',
+          },
+          keyframes: {
+            fadeIn: { from: { opacity: '0' }, to: { opacity: '1' } },
+            slideUp: { from: { opacity: '0', transform: 'translateY(20px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+            slideInRight: { from: { opacity: '0', transform: 'translateX(30px)' }, to: { opacity: '1', transform: 'translateX(0)' } },
+            bounceLight: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-6px)' } },
+            gradientShift: { '0%,100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
+            confettiFall: { from: { transform: 'translateY(-20px) rotate(0deg)', opacity: '1' }, to: { transform: 'translateY(120vh) rotate(720deg)', opacity: '0' } },
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── Global resets & base ─────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #050B18;
+      color: #E2E8F0;
+      overflow-x: hidden;
+      margin: 0;
+    }
+
+    /* ── Mesh gradient hero ───────────────────────────── */
+    .mesh-gradient {
+      background: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99,102,241,0.18) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 60% at 80% 30%, rgba(20,184,166,0.13) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 40% at 50% 80%, rgba(139,92,246,0.12) 0%, transparent 60%),
+                  #050B18;
+    }
+
+    /* ── Glassmorphism cards ──────────────────────────── */
+    .glass {
+      background: rgba(15, 23, 41, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(99,102,241,0.12);
+    }
+    .glass-light {
+      background: rgba(19, 30, 51, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* ── Scrollbar ────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.35); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.6); }
+
+    /* ── Sidebar transitions ──────────────────────────── */
+    .sidebar-collapsed { width: 64px !important; }
+    .sidebar-expanded { width: 240px; }
+    .sidebar-label { transition: opacity 0.2s, width 0.2s; }
+    .sidebar-collapsed .sidebar-label { opacity: 0; width: 0; overflow: hidden; }
+
+    /* ── Circular progress ────────────────────────────── */
+    .progress-ring { transform: rotate(-90deg); }
+    .progress-ring-fill { transition: stroke-dashoffset 1.2s cubic-bezier(0.16,1,0.3,1); }
+
+    /* ── Drag & drop ──────────────────────────────────── */
+    .drag-over {
+      border: 2px dashed rgba(99,102,241,0.6) !important;
+      background: rgba(99,102,241,0.05) !important;
+    }
+    .dragging { opacity: 0.5; transform: rotate(2deg); cursor: grabbing !important; }
+
+    /* ── Toast notifications ──────────────────────────── */
+    #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column-reverse; gap: 10px; }
+    .toast {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: 12px; min-width: 280px; max-width: 380px;
+      background: rgba(15,23,41,0.97); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      animation: slideInRight 0.35s cubic-bezier(0.16,1,0.3,1);
+      font-family: 'Inter', sans-serif; font-size: 13px; color: #E2E8F0;
+    }
+    .toast.toast-out { animation: slideOutRight 0.25s ease-in forwards; }
+    @keyframes slideOutRight { to { opacity: 0; transform: translateX(120%); } }
+
+    /* ── Gradient text ────────────────────────────────── */
+    .gradient-text {
+      background: linear-gradient(135deg, #6366F1, #14B8A6);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .gradient-text-purple {
+      background: linear-gradient(135deg, #8B5CF6, #EC4899);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ── Button styles ────────────────────────────────── */
+    .btn-primary {
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      transition: all 0.2s; box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(99,102,241,0.45); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-teal {
+      background: linear-gradient(135deg, #14B8A6, #06B6D4);
+      box-shadow: 0 4px 16px rgba(20,184,166,0.3);
+      transition: all 0.2s;
+    }
+    .btn-teal:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(20,184,166,0.45); }
+
+    /* ── Card hover ───────────────────────────────────── */
+    .card-hover {
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .card-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      border-color: rgba(99,102,241,0.35) !important;
+    }
+
+    /* ── Input styles ─────────────────────────────────── */
+    .cf-input {
+      background: rgba(19,30,51,0.8);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #E2E8F0; border-radius: 10px; padding: 10px 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .cf-input:focus { outline: none; border-color: rgba(99,102,241,0.5); box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
+    .cf-input::placeholder { color: rgba(148,163,184,0.5); }
+
+    /* ── Badge ────────────────────────────────────────── */
+    .badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.02em; }
+
+    /* ── Stat card glow ───────────────────────────────── */
+    .stat-glow-indigo { box-shadow: 0 0 30px rgba(99,102,241,0.08); }
+    .stat-glow-teal { box-shadow: 0 0 30px rgba(20,184,166,0.08); }
+    .stat-glow-purple { box-shadow: 0 0 30px rgba(139,92,246,0.08); }
+
+    /* ── Kanban column ────────────────────────────────── */
+    .kanban-col { min-height: 300px; transition: background 0.2s, border 0.2s; }
+
+    /* ── Upload area ──────────────────────────────────── */
+    .upload-area { transition: border-color 0.2s, background 0.2s; }
+    .upload-area:hover { border-color: rgba(99,102,241,0.5) !important; background: rgba(99,102,241,0.05) !important; }
+    .upload-area.dragging-file { border-color: #6366F1 !important; background: rgba(99,102,241,0.08) !important; }
+
+    /* ── Modal backdrop ───────────────────────────────── */
+    .modal-backdrop { animation: fadeIn 0.2s ease-out; }
+    .modal-panel { animation: slideUp 0.3s cubic-bezier(0.16,1,0.3,1); }
+
+    /* ── Confetti ─────────────────────────────────────── */
+    .confetti-piece {
+      position: fixed; width: 8px; height: 8px; pointer-events: none; z-index: 10000;
+      animation: confettiFall 2.2s ease-in forwards;
+    }
+
+    /* ── Hero grid lines ──────────────────────────────── */
+    .grid-lines {
+      background-image:
+        linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* ── Animated border ──────────────────────────────── */
+    .animated-border {
+      background: linear-gradient(90deg, #6366F1, #14B8A6, #8B5CF6, #6366F1);
+      background-size: 300% 100%;
+      animation: gradientShift 4s ease infinite;
+    }
+
+    /* ── Landing page ─────────────────────────────────── */
+    #landing { display: flex; }
+    .app-shell { display: none; }
+    .app-shell.active { display: flex; }
+
+    /* ── Score pill ───────────────────────────────────── */
+    .score-pill { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; }
+
+    /* ── Table ────────────────────────────────────────── */
+    .cf-table th { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(148,163,184,0.7); padding: 10px 14px; }
+    .cf-table td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .cf-table tr:hover td { background: rgba(99,102,241,0.04); }
+
+    /* ── Profile avatar ring ──────────────────────────── */
+    .avatar-ring { background: conic-gradient(#6366F1, #14B8A6, #8B5CF6, #6366F1); padding: 2px; border-radius: 50%; }
+  </style>
+</head>
+
+<body x-data="campusFlow()" x-init="init()" class="min-h-screen">
+
+<!-- ── TOAST CONTAINER ─────────────────────────────────── -->
+<div id="toast-container"></div>
+
+<!-- ── CONFETTI CONTAINER ──────────────────────────────── -->
+<div id="confetti-container" class="pointer-events-none"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 1: LANDING PAGE
+════════════════════════════════════════════════════════════ -->
+<section id="landing" class="mesh-gradient grid-lines min-h-screen flex-col items-center justify-center relative overflow-hidden px-6">
+
+  <!-- Floating orbs -->
+  <div class="absolute top-20 left-[10%] w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+  <div class="absolute bottom-20 right-[10%] w-96 h-96 bg-teal-500/8 rounded-full blur-3xl animate-pulse-slow" style="animation-delay:1.5s"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-3xl"></div>
+
+  <!-- Navbar on landing -->
+  <nav class="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-8 py-5">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg btn-primary flex items-center justify-center">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 12L8 4L13 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 9.5H10.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="font-display font-800 text-lg text-white tracking-tight">CampusFlow</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <button @click="enterApp('student')" class="text-sm text-slate-400 hover:text-white transition px-4 py-2 rounded-lg hover:bg-white/5">Sign In</button>
+      <button @click="enterApp('student')" class="btn-primary text-sm font-semibold text-white px-5 py-2 rounded-lg">Get Started Free</button>
+    </div>
+  </nav>
+
+  <!-- Hero content -->
+  <div class="relative z-10 text-center max-w-4xl mx-auto pt-24 pb-16 animate-fade-in">
+
+    <!-- Eyebrow badge -->
+    <div class="inline-flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full glass border border-indigo-500/20 text-xs font-medium text-indigo-300">
+      <div class="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse"></div>
+      AI-Powered Campus Recruitment Platform
+    </div>
+
+    <h1 class="font-display text-5xl md:text-7xl font-800 text-white leading-[1.05] tracking-tight mb-6">
+      Your Dream Career<br/>
+      <span class="gradient-text">Starts on Campus.</span>
+    </h1>
+
+    <p class="text-lg text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed">
+      CampusFlow connects students with top recruiters using AI matching, smart screening, and a pipeline that moves at the speed of ambition.
+    </p>
+
+    <!-- CTA row -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <button @click="enterApp('student')" class="btn-primary font-display font-700 text-white px-8 py-3.5 rounded-xl text-base flex items-center gap-2.5 w-full sm:w-auto justify-center">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        I'm a Student
+      </button>
+      <button @click="enterApp('recruiter')" class="btn-teal font-display font-700 text-white px-8 py-3.5 rounded-xl text-base flex items-center gap-2.5 w-full sm:w-auto justify-center">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        I'm a Recruiter
+      </button>
+    </div>
+
+    <!-- Social proof -->
+    <div class="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl font-display font-800 gradient-text">2,400+</span>
+        <span>Students Placed</span>
+      </div>
+      <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
+      <div class="flex items-center gap-2">
+        <span class="text-2xl font-display font-800 gradient-text">340+</span>
+        <span>Partner Companies</span>
+      </div>
+      <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
+      <div class="flex items-center gap-2">
+        <span class="text-2xl font-display font-800 gradient-text">94%</span>
+        <span>Match Accuracy</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating preview cards -->
+  <div class="relative z-10 w-full max-w-5xl mx-auto px-4 pb-16">
+    <div class="grid grid-cols-3 gap-4">
+      <!-- Card 1 -->
+      <div class="glass rounded-2xl p-4 card-hover border border-white/5 animate-slide-up" style="animation-delay:0.1s">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">G</div>
+          <span class="badge bg-teal-500/15 text-teal-400 border border-teal-500/20">96% Match</span>
+        </div>
+        <div class="text-sm font-semibold text-white mb-1">SWE Intern — Google</div>
+        <div class="text-xs text-slate-500">₹2.4L/mo · Bangalore</div>
+      </div>
+      <!-- Card 2 -->
+      <div class="glass rounded-2xl p-4 card-hover border border-white/5 animate-slide-up" style="animation-delay:0.2s">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center text-sm font-bold text-white">M</div>
+          <span class="badge bg-indigo-500/15 text-indigo-400 border border-indigo-500/20">89% Match</span>
+        </div>
+        <div class="text-sm font-semibold text-white mb-1">ML Engineer — Microsoft</div>
+        <div class="text-xs text-slate-500">₹1.8L/mo · Hyderabad</div>
+      </div>
+      <!-- Card 3 -->
+      <div class="glass rounded-2xl p-4 card-hover border border-white/5 animate-slide-up" style="animation-delay:0.3s">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-sm font-bold text-white">A</div>
+          <span class="badge bg-purple-500/15 text-purple-400 border border-purple-500/20">82% Match</span>
+        </div>
+        <div class="text-sm font-semibold text-white mb-1">Data Analyst — Amazon</div>
+        <div class="text-xs text-slate-500">₹1.5L/mo · Remote</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 2: APP SHELL (hidden until entered)
+════════════════════════════════════════════════════════════ -->
+<div id="app-shell" class="app-shell flex-col min-h-screen bg-navy-900" :class="{ 'active': appActive }">
+
+  <!-- ── TOP NAVBAR ─────────────────────────────────────── -->
+  <header class="h-14 glass border-b border-white/[0.06] flex items-center justify-between px-4 fixed top-0 left-0 right-0 z-40">
+
+    <!-- Left: toggle + logo -->
+    <div class="flex items-center gap-3">
+      <button @click="sidebarOpen = !sidebarOpen" class="w-8 h-8 rounded-lg hover:bg-white/5 flex items-center justify-center transition-colors text-slate-400 hover:text-white">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-lg btn-primary flex items-center justify-center">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 12L8 4L13 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 9.5H10.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <span class="font-display font-700 text-sm text-white tracking-tight">CampusFlow</span>
+      </div>
+    </div>
+
+    <!-- Center: global search (desktop) -->
+    <div class="hidden md:flex items-center gap-2 flex-1 max-w-xs mx-8">
+      <div class="relative w-full">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="Search anything..." class="cf-input w-full text-xs pl-8 h-8" />
+      </div>
+    </div>
+
+    <!-- Right: role switcher + actions -->
+    <div class="flex items-center gap-2">
+
+      <!-- Role switcher -->
+      <div class="flex items-center bg-surface-2 border border-white/[0.07] rounded-lg p-0.5 text-xs font-medium">
+        <button @click="switchRole('student')" :class="role === 'student' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'" class="px-3 py-1.5 rounded-md transition-all duration-200 flex items-center gap-1.5">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Student
+        </button>
+        <button @click="switchRole('recruiter')" :class="role === 'recruiter' ? 'bg-teal-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'" class="px-3 py-1.5 rounded-md transition-all duration-200 flex items-center gap-1.5">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Recruiter
+        </button>
+      </div>
+
+      <!-- Notifications -->
+      <button class="relative w-8 h-8 rounded-lg hover:bg-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-colors">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+      </button>
+
+      <!-- Profile -->
+      <div class="avatar-ring cursor-pointer" @click="showToast('Profile settings coming soon!', 'info')">
+        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">
+          <span x-text="role === 'student' ? 'V' : 'R'"></span>
+        </div>
+      </div>
+
+      <!-- Back to landing -->
+      <button @click="exitApp()" class="text-slate-500 hover:text-slate-300 transition-colors ml-1">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </header>
+
+
+  <!-- ── MAIN LAYOUT: SIDEBAR + CONTENT ─────────────────── -->
+  <div class="flex pt-14 min-h-screen">
+
+    <!-- ── SIDEBAR ────────────────────────────────────────── -->
+    <aside :class="sidebarOpen ? 'sidebar-expanded w-60' : 'sidebar-collapsed w-16'"
+           class="fixed left-0 top-14 h-[calc(100vh-56px)] bg-navy-800 border-r border-white/[0.06] z-30 flex flex-col transition-all duration-300 overflow-hidden">
+
+      <nav class="flex-1 py-4 px-2 flex flex-col gap-1 overflow-y-auto">
+
+        <!-- Student nav -->
+        <template x-if="role === 'student'">
+          <div class="flex flex-col gap-1">
+            <template x-for="item in studentNav" :key="item.id">
+              <button @click="activePage = item.id"
+                      :class="activePage === item.id ? 'bg-indigo-600/20 text-indigo-300 border-l-2 border-indigo-500' : 'text-slate-400 hover:text-white hover:bg-white/5'"
+                      class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 w-full text-left group">
+                <span class="flex-shrink-0" x-html="item.icon"></span>
+                <span class="sidebar-label text-sm font-medium whitespace-nowrap" x-text="item.label"></span>
+                <span x-if="item.badge" class="sidebar-label ml-auto text-[10px] font-bold bg-indigo-500/30 text-indigo-300 px-1.5 py-0.5 rounded-full" x-text="item.badge"></span>
+              </button>
+            </template>
+          </div>
+        </template>
+
+        <!-- Recruiter nav -->
+        <template x-if="role === 'recruiter'">
+          <div class="flex flex-col gap-1">
+            <template x-for="item in recruiterNav" :key="item.id">
+              <button @click="activePage = item.id"
+                      :class="activePage === item.id ? 'bg-teal-600/20 text-teal-300 border-l-2 border-teal-500' : 'text-slate-400 hover:text-white hover:bg-white/5'"
+                      class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 w-full text-left group">
+                <span class="flex-shrink-0" x-html="item.icon"></span>
+                <span class="sidebar-label text-sm font-medium whitespace-nowrap" x-text="item.label"></span>
+              </button>
+            </template>
+          </div>
+        </template>
+      </nav>
+
+      <!-- Bottom: collapse hint -->
+      <div class="p-3 border-t border-white/[0.06]">
+        <button @click="sidebarOpen = !sidebarOpen" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:text-slate-300 transition-colors hover:bg-white/5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="sidebarOpen ? '' : 'rotate-180'"><path d="M15 18l-6-6 6-6"/></svg>
+          <span class="sidebar-label text-xs whitespace-nowrap">Collapse</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ─────────────────────────────────── -->
+    <main :class="sidebarOpen ? 'ml-60' : 'ml-16'" class="flex-1 transition-all duration-300 min-h-screen">
+
+
+      <!-- ══════════════════════════════════════════════════
+           STUDENT: OPPORTUNITIES PAGE
+      ══════════════════════════════════════════════════════ -->
+      <div x-show="role === 'student' && activePage === 'opportunities'" class="p-6 animate-fade-in">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div>
+            <h1 class="font-display text-2xl font-700 text-white">Opportunities</h1>
+            <p class="text-sm text-slate-500 mt-0.5">AI-ranked roles based on your profile · <span class="text-indigo-400 font-medium" x-text="roles.length + ' roles available'"></span></p>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input type="text" x-model="searchQuery" placeholder="Search roles, companies…" class="cf-input pl-9 w-56 h-9 text-sm" />
+            </div>
+            <select class="cf-input h-9 text-sm text-slate-400" x-model="filterType">
+              <option value="">All Types</option>
+              <option value="Internship">Internship</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Research">Research</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Roles grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <template x-for="role_item in filteredRoles" :key="role_item.id">
+            <div @click="openRoleModal(role_item)"
+                 class="glass rounded-2xl p-5 cursor-pointer card-hover border border-white/[0.06] group">
+
+              <!-- Header -->
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-xl flex items-center justify-center text-base font-bold text-white flex-shrink-0"
+                       :style="'background: linear-gradient(135deg,' + role_item.color1 + ',' + role_item.color2 + ')'">
+                    <span x-text="role_item.company[0]"></span>
+                  </div>
+                  <div>
+                    <div class="text-xs text-slate-500 font-medium" x-text="role_item.company"></div>
+                    <div class="text-sm font-semibold text-white leading-tight" x-text="role_item.title"></div>
+                  </div>
+                </div>
+                <!-- Circular match score -->
+                <div class="flex-shrink-0 relative w-12 h-12">
+                  <svg class="progress-ring" width="48" height="48">
+                    <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(99,102,241,0.15)" stroke-width="3"/>
+                    <circle cx="24" cy="24" r="18" fill="none"
+                            :stroke="role_item.match >= 85 ? '#14B8A6' : role_item.match >= 70 ? '#6366F1' : '#8B5CF6'"
+                            stroke-width="3" stroke-linecap="round"
+                            :stroke-dasharray="'113'"
+                            :stroke-dashoffset="113 - (113 * role_item.match / 100)"
+                            class="progress-ring-fill"/>
+                  </svg>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-[10px] font-bold score-pill" :class="role_item.match >= 85 ? 'text-teal-400' : 'text-indigo-400'" x-text="role_item.match + '%'"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tags row -->
+              <div class="flex flex-wrap gap-1.5 mb-3">
+                <span class="badge bg-slate-800 text-slate-400 border border-white/5" x-text="role_item.type"></span>
+                <span class="badge bg-indigo-500/10 text-indigo-400 border border-indigo-500/15" x-text="role_item.location"></span>
+                <span x-if="role_item.remote" class="badge bg-teal-500/10 text-teal-400 border border-teal-500/15">Remote OK</span>
+              </div>
+
+              <!-- Skills -->
+              <div class="flex flex-wrap gap-1 mb-4">
+                <template x-for="skill in role_item.skills.slice(0,3)" :key="skill">
+                  <span class="text-[10px] font-medium px-2 py-0.5 bg-surface-3 text-slate-400 rounded-md border border-white/[0.04]" x-text="skill"></span>
+                </template>
+                <span x-if="role_item.skills.length > 3" class="text-[10px] font-medium px-2 py-0.5 bg-surface-3 text-slate-500 rounded-md border border-white/[0.04]" x-text="'+' + (role_item.skills.length - 3)"></span>
+              </div>
+
+              <!-- Footer -->
+              <div class="flex items-center justify-between pt-3 border-t border-white/[0.05]">
+                <div>
+                  <div class="text-sm font-semibold text-white" x-text="role_item.stipend"></div>
+                  <div class="text-[11px] text-slate-500" x-text="role_item.deadline"></div>
+                </div>
+                <button @click.stop="quickApply(role_item)"
+                        class="btn-primary text-xs font-semibold text-white px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                  Quick Apply
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════
+           STUDENT: MY APPLICATIONS (KANBAN)
+      ══════════════════════════════════════════════════════ -->
+      <div x-show="role === 'student' && activePage === 'applications'" class="p-6 animate-fade-in">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="font-display text-2xl font-700 text-white">My Applications</h1>
+            <p class="text-sm text-slate-500 mt-0.5">Track your recruitment pipeline</p>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-slate-500">
+            <div class="w-2 h-2 rounded-full bg-teal-400"></div>
+            <span x-text="studentApplications.filter(a=>a.status==='Offered').length + ' offers received'"></span>
+          </div>
+        </div>
+
+        <div class="flex gap-4 overflow-x-auto pb-4">
+          <template x-for="col in studentKanbanCols" :key="col.id">
+            <div class="flex-shrink-0 w-64">
+              <!-- Column header -->
+              <div class="flex items-center justify-between mb-3 px-1">
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full" :style="'background:' + col.color"></div>
+                  <span class="text-xs font-semibold text-slate-300" x-text="col.label"></span>
+                </div>
+                <span class="text-[11px] font-bold bg-surface-3 text-slate-500 px-2 py-0.5 rounded-full"
+                      x-text="studentApplications.filter(a=>a.status===col.id).length"></span>
+              </div>
+              <!-- Cards -->
+              <div class="kanban-col rounded-xl p-2 bg-surface-2/50 border border-white/[0.04] flex flex-col gap-2">
+                <template x-for="app in studentApplications.filter(a=>a.status===col.id)" :key="app.id">
+                  <div class="bg-surface rounded-xl p-3 border border-white/[0.06] card-hover cursor-pointer">
+                    <div class="flex items-center gap-2 mb-2">
+                      <div class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                           :style="'background:linear-gradient(135deg,' + app.color1 + ',' + app.color2 + ')'">
+                        <span x-text="app.company[0]"></span>
+                      </div>
+                      <div class="min-w-0">
+                        <div class="text-xs font-semibold text-white truncate" x-text="app.role"></div>
+                        <div class="text-[10px] text-slate-500 truncate" x-text="app.company"></div>
+                      </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] text-slate-600" x-text="app.date"></span>
+                      <span x-if="app.status === 'Offered'" class="text-[10px] font-semibold text-teal-400">🎉 Offer!</span>
+                      <span x-if="app.aiScore" class="text-[10px] font-bold text-indigo-400" x-text="app.aiScore + ' AI'"></span>
+                    </div>
+                  </div>
+                </template>
+                <div x-if="studentApplications.filter(a=>a.status===col.id).length === 0"
+                     class="py-6 text-center text-xs text-slate-700">No items</div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════
+           STUDENT: PROFILE PAGE
+      ══════════════════════════════════════════════════════ -->
+      <div x-show="role === 'student' && activePage === 'profile'" class="p-6 animate-fade-in max-w-3xl">
+        <h1 class="font-display text-2xl font-700 text-white mb-6">My Profile</h1>
+
+        <!-- Profile card -->
+        <div class="glass rounded-2xl p-6 border border-white/[0.06] mb-5">
+          <div class="flex items-start gap-5">
+            <div class="avatar-ring flex-shrink-0">
+              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-bold text-white">V</div>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-1">
+                <h2 class="font-display text-xl font-700 text-white">Vedant Sharma</h2>
+                <span class="badge bg-indigo-500/15 text-indigo-400 border border-indigo-500/20">B.Tech CSE</span>
+              </div>
+              <div class="text-sm text-slate-400 mb-3">NIT Raipur · Batch 2025–29 · CGPA 8.91</div>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs px-2.5 py-1 bg-surface-3 text-slate-300 rounded-lg border border-white/[0.05]">C++ / DSA</span>
+                <span class="text-xs px-2.5 py-1 bg-surface-3 text-slate-300 rounded-lg border border-white/[0.05]">JavaScript</span>
+                <span class="text-xs px-2.5 py-1 bg-surface-3 text-slate-300 rounded-lg border border-white/[0.05]">React</span>
+                <span class="text-xs px-2.5 py-1 bg-surface-3 text-slate-300 rounded-lg border border-white/[0.05]">Python</span>
+                <span class="text-xs px-2.5 py-1 bg-surface-3 text-slate-300 rounded-lg border border-white/[0.05]">Tailwind CSS</span>
+              </div>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="text-3xl font-display font-800 gradient-text">87</div>
+              <div class="text-xs text-slate-500">Profile Score</div>
+              <div class="h-1 w-20 bg-surface-3 rounded-full mt-1.5 overflow-hidden">
+                <div class="h-full w-[87%] animated-border rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CV Upload + AI Optimizer -->
+        <div class="glass rounded-2xl p-6 border border-white/[0.06] mb-5">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-display font-600 text-white">Resume / CV</h3>
+            <button @click="runAIOptimizer()" :disabled="aiRunning"
+                    class="btn-primary text-xs font-semibold text-white px-4 py-2 rounded-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              <span x-text="aiRunning ? 'Analysing…' : 'AI Resume Optimizer'"></span>
+            </button>
+          </div>
+
+          <!-- Upload area -->
+          <div class="upload-area border-2 border-dashed border-white/10 rounded-xl p-8 text-center cursor-pointer"
+               @dragover.prevent="$el.classList.add('dragging-file')"
+               @dragleave="$el.classList.remove('dragging-file')"
+               @drop.prevent="$el.classList.remove('dragging-file'); handleFileDrop($event)"
+               @click="showToast('File picker would open here in production', 'info')">
+            <svg class="mx-auto mb-3 text-slate-600" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <p class="text-sm text-slate-400 font-medium">Drop your CV here or <span class="text-indigo-400 cursor-pointer">browse</span></p>
+            <p class="text-xs text-slate-600 mt-1">PDF, DOCX up to 10MB</p>
+          </div>
+
+          <!-- AI Progress (shown while running) -->
+          <div x-show="aiRunning" class="mt-4 glass-light rounded-xl p-4 animate-fade-in">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center animate-pulse">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+              </div>
+              <div class="flex-1">
+                <div class="text-xs font-semibold text-white mb-1">AI Analysing your resume…</div>
+                <div class="h-1.5 bg-surface-3 rounded-full overflow-hidden">
+                  <div class="h-full animated-border rounded-full transition-all duration-500" :style="'width:' + aiProgress + '%'"></div>
+                </div>
+              </div>
+              <span class="text-xs font-bold text-indigo-400" x-text="aiProgress + '%'"></span>
+            </div>
+            <div class="text-xs text-slate-500" x-text="aiStep"></div>
+          </div>
+
+          <!-- AI Results -->
+          <div x-show="aiResults" class="mt-4 animate-slide-up">
+            <div class="grid grid-cols-3 gap-3 mb-4">
+              <div class="bg-surface-3 rounded-xl p-3 text-center border border-white/[0.05]">
+                <div class="text-2xl font-display font-800 text-teal-400">91</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">ATS Score</div>
+              </div>
+              <div class="bg-surface-3 rounded-xl p-3 text-center border border-white/[0.05]">
+                <div class="text-2xl font-display font-800 text-indigo-400">+18%</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Match Boost</div>
+              </div>
+              <div class="bg-surface-3 rounded-xl p-3 text-center border border-white/[0.05]">
+                <div class="text-2xl font-display font-800 text-purple-400">3</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Suggestions</div>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <template x-for="sug in aiSuggestions" :key="sug">
+                <div class="flex items-start gap-2 text-xs text-slate-400 bg-surface-3 rounded-lg px-3 py-2.5 border border-white/[0.04]">
+                  <svg class="text-teal-400 flex-shrink-0 mt-0.5" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span x-text="sug"></span>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ══════════════════════════════════════════════════
+           RECRUITER: DASHBOARD
+      ══════════════════════════════════════════════════════ -->
+      <div x-show="role === 'recruiter' && activePage === 'dashboard'" class="p-6 animate-fade-in">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="font-display text-2xl font-700 text-white">Recruitment Dashboard</h1>
+            <p class="text-sm text-slate-500 mt-0.5">Welcome back, Ravi · TechCorp India</p>
+          </div>
+          <button @click="openCreateRole()" class="btn-primary text-sm font-semibold text-white px-4 py-2.5 rounded-xl flex items-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Post New Role
+          </button>
+        </div>
+
+        <!-- Stats grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <template x-for="stat in dashStats" :key="stat.label">
+            <div class="glass rounded-2xl p-5 border border-white/[0.06] card-hover" :class="stat.glow">
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center" :style="'background:' + stat.iconBg">
+                  <span x-html="stat.icon"></span>
+                </div>
+                <span class="text-xs font-semibold text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded-full" x-text="stat.change"></span>
+              </div>
+              <div class="text-2xl font-display font-800 text-white" x-text="stat.value"></div>
+              <div class="text-xs text-slate-500 mt-0.5" x-text="stat.label"></div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Recent activity + AI insights -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+          <!-- Recent applications -->
+          <div class="lg:col-span-2 glass rounded-2xl p-5 border border-white/[0.06]">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-display font-600 text-white text-sm">Recent Applications</h3>
+              <button @click="activePage='candidates'" class="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">View all →</button>
+            </div>
+            <div class="space-y-3">
+              <template x-for="cand in candidates.slice(0,4)" :key="cand.id">
+                <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/[0.03] transition-colors cursor-pointer" @click="openCandidateModal(cand)">
+                  <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
+                       :style="'background:linear-gradient(135deg,' + cand.color1 + ',' + cand.color2 + ')'">
+                    <span x-text="cand.name[0]"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-semibold text-white" x-text="cand.name"></div>
+                    <div class="text-xs text-slate-500" x-text="cand.role + ' · ' + cand.college"></div>
+                  </div>
+                  <div class="flex items-center gap-2 flex-shrink-0">
+                    <div class="text-right">
+                      <div class="text-sm font-bold" :class="cand.aiScore >= 85 ? 'text-teal-400' : cand.aiScore >= 70 ? 'text-indigo-400' : 'text-yellow-400'" x-text="cand.aiScore"></div>
+                      <div class="text-[10px] text-slate-600">AI Score</div>
+                    </div>
+                    <span class="badge border text-[10px]"
+                          :class="{
+                            'bg-blue-500/10 text-blue-400 border-blue-500/20': cand.stage === 'Applied',
+                            'bg-yellow-500/10 text-yellow-400 border-yellow-500/20': cand.stage === 'Screened',
+                            'bg-purple-500/10 text-purple-400 border-purple-500/20': cand.stage === 'Interview',
+                            'bg-teal-500/10 text-teal-400 border-teal-500/20': cand.stage === 'Offered',
+                          }"
+                          x-text="cand.stage"></span>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- AI Insights panel -->
+          <div class="glass rounded-2xl p-5 border border-indigo-500/10">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <span class="text-sm font-display font-600 text-white">AI Insights</span>
+            </div>
+            <div class="space-y-3">
+              <template x-for="insight in aiInsights" :key="insight.text">
+                <div class="flex items-start gap-2.5 p-3 rounded-xl bg-surface-3 border border-white/[0.04]">
+                  <div class="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" :style="'background:' + insight.color + '20'">
+                    <span x-html="insight.icon" :style="'color:' + insight.color"></span>
+                  </div>
+                  <p class="text-xs text-slate-400 leading-relaxed" x-text="insight.text"></p>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ══════════════════════════════════════════════════
+           RECRUITER: PIPELINE (KANBAN)
+      ══════════════════════════════════════════════════════ -->
+      <div x-show="role === 'recruiter' && activePage === 'pipeline'" class="p-6 animate-fade-in">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="font-display text-2xl font-700 text-white">Hiring Pipeline</h1>
+            <p class="text-sm text-slate-500 mt-0.5">Drag candidates across stages</p>
+          </div>
+          <button @click="openCreateRole()" class="btn-teal text-sm font-semibold text-white px-4 py-2.5 rounded-xl flex items-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Role
+          </button>
+        </div>
+
+        <div class="flex gap-4 overflow-x-auto pb-4" id="pipeline-board">
+          <template x-for="stage in pipelineStages" :key="stage.id">
+            <div class="flex-shrink-0 w-64">
+              <!-- Stage header -->
+              <div class="flex items-center justify-between mb-3 px-1">
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full" :style="'background:' + stage.color"></div>
+                  <span class="text-xs font-semibold text-slate-300" x-text="stage.label"></span>
+                </div>
+                <span class="text-[11px] font-bold bg-surface-3 text-slate-500 px-2 py-0.5 rounded-full"
+                      x-text="candidates.filter(c=>c.stage===stage.id).length"></span>
+              </div>
+
+              <!-- Drop zone -->
+              <div class="kanban-col rounded-xl p-2 bg-surface-2/50 border border-white/[0.04] flex flex-col gap-2"
+                   :id="'stage-' + stage.id"
+                   @dragover.prevent="onDragOver($event)"
+                   @dragleave="onDragLeave($event)"
+                   @drop="onDrop($event, stage.id)">
+
+                <template x-for="cand in candidates.filter(c=>c.stage===stage.id)" :key="cand.id">
+                  <div class="bg-surface rounded-xl p-3 border border-white/[0.06] card-hover cursor-grab select-none"
+                       :id="'cand-' + cand.id"
+                       draggable="true"
+                       @dragstart="onDragStart($event, cand.id)"
+                       @dragend="onDragEnd($event)"
+                       @click="openCandidateModal(cand)">
+                    <div class="flex items-center gap-2 mb-2">
+                      <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                           :style="'background:linear-gradient(135deg,' + cand.color1 + ',' + cand.color2 + ')'">
+                        <span x-text="cand.name[0]"></span>
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <div class="text-xs font-semibold text-white truncate" x-text="cand.name"></div>
+                        <div class="text-[10px] text-slate-500" x-text="cand.college"></div>
+                      </div>
+                      <div class="text-xs font-bold flex-shrink-0" :class="cand.aiScore >= 85 ? 'text-teal-400' : cand.aiScore >= 70 ? 'text-indigo-400' : 'text-yellow-400'" x-text="cand.aiScore"></div>
+                    </div>
+                    <div class="text-[10px] text-slate-600" x-text="cand.role"></div>
+                    <div class="flex gap-1 mt-2 flex-wrap">
+                      <template x-for="skill in cand.skills.slice(0,2)" :key="skill">
+                        <span class="text-[9px] px-1.5 py-0.5 bg-surface-4 text-slate-500 rounded border border-white/[0.04]" x-text="skill"></span>
+                      </template>
+                    </div>
+                  </div>
+                </template>
+
+                <div x-if="candidates.filter(c=>c.stage===stage.id).length === 0"
+                     class="py-8 text-center text-xs text-slate-700 border border-dashed border-white/[0.04] rounded-lg">
+                  Drop here
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+
+      <!-- ══════════════════════════════════════════════════
+           RECRUITER: CANDIDATES TABLE
+      ══════════════════════════════════════════════════════ -->
+      <div x-show="role === 'recruiter' && activePage === 'candidates'" class="p-6 animate-fade-in">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div>
+            <h1 class="font-display text-2xl font-700 text-white">Candidates</h1>
+            <p class="text-sm text-slate-500 mt-0.5" x-text="candidates.length + ' candidates in database'"></p>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input type="text" x-model="candidateSearch" placeholder="Search candidates…" class="cf-input pl-9 w-48 h-9 text-sm" />
+            </div>
+            <select class="cf-input h-9 text-sm text-slate-400" x-model="candidateFilter">
+              <option value="">All Stages</option>
+              <option value="Applied">Applied</option>
+              <option value="Screened">Screened</option>
+              <option value="Interview">Interview</option>
+              <option value="Offered">Offered</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="glass rounded-2xl border border-white/[0.06] overflow-hidden">
+          <table class="w-full cf-table">
+            <thead class="border-b border-white/[0.06]">
+              <tr>
+                <th class="text-left">Candidate</th>
+                <th class="text-left">College</th>
+                <th class="text-left">Applied For</th>
+                <th class="text-left">AI Score</th>
+                <th class="text-left">Stage</th>
+                <th class="text-left">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="cand in filteredCandidates" :key="cand.id">
+                <tr class="cursor-pointer" @click="openCandidateModal(cand)">
+                  <td>
+                    <div class="flex items-center gap-2.5">
+                      <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                           :style="'background:linear-gradient(135deg,' + cand.color1 + ',' + cand.color2 + ')'">
+                        <span x-text="cand.name[0]"></span>
+                      </div>
+                      <div>
+                        <div class="text-sm font-semibold text-white" x-text="cand.name"></div>
+                        <div class="text-xs text-slate-500" x-text="cand.email"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-slate-400 text-xs" x-text="cand.college"></td>
+                  <td class="text-slate-300 text-xs" x-text="cand.role"></td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <div class="h-1.5 w-16 bg-surface-4 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full transition-all" :style="'width:' + cand.aiScore + '%;background:' + (cand.aiScore >= 85 ? '#14B8A6' : cand.aiScore >= 70 ? '#6366F1' : '#F59E0B')"></div>
+                      </div>
+                      <span class="text-xs font-bold" :class="cand.aiScore >= 85 ? 'text-teal-400' : cand.aiScore >= 70 ? 'text-indigo-400' : 'text-yellow-400'" x-text="cand.aiScore"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge border text-[10px]"
+                          :class="{
+                            'bg-blue-500/10 text-blue-400 border-blue-500/20': cand.stage === 'Applied',
+                            'bg-yellow-500/10 text-yellow-400 border-yellow-500/20': cand.stage === 'Screened',
+                            'bg-purple-500/10 text-purple-400 border-purple-500/20': cand.stage === 'Interview',
+                            'bg-teal-500/10 text-teal-400 border-teal-500/20': cand.stage === 'Offered',
+                          }"
+                          x-text="cand.stage"></span>
+                  </td>
+                  <td>
+                    <button @click.stop="moveCandidateForward(cand)"
+                            class="text-xs text-indigo-400 hover:text-indigo-300 transition-colors font-medium">
+                      Advance →
+                    </button>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════════════════════ -->
+
+<!-- ── Role Detail Modal ────────────────────────────────── -->
+<div x-show="roleModal.open" x-transition:enter="modal-backdrop" class="fixed inset-0 z-50 flex items-center justify-center p-4"
+     @click.self="roleModal.open = false">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+  <div x-show="roleModal.open" class="modal-panel relative glass rounded-3xl w-full max-w-lg border border-white/10 overflow-hidden">
+
+    <template x-if="roleModal.data">
+      <div>
+        <!-- Header -->
+        <div class="p-6 border-b border-white/[0.07]">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold text-white"
+                   :style="'background:linear-gradient(135deg,' + roleModal.data.color1 + ',' + roleModal.data.color2 + ')'">
+                <span x-text="roleModal.data.company[0]"></span>
+              </div>
+              <div>
+                <h2 class="font-display text-lg font-700 text-white" x-text="roleModal.data.title"></h2>
+                <p class="text-sm text-slate-400" x-text="roleModal.data.company + ' · ' + roleModal.data.location"></p>
+              </div>
+            </div>
+            <button @click="roleModal.open = false" class="text-slate-500 hover:text-white transition-colors p-1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="p-6 space-y-5">
+          <!-- AI match breakdown -->
+          <div class="bg-surface-3 rounded-2xl p-4 border border-indigo-500/15">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-5 h-5 rounded-md bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+              </div>
+              <span class="text-sm font-semibold text-white">AI Match Analysis</span>
+              <span class="ml-auto text-lg font-display font-800 gradient-text" x-text="roleModal.data.match + '%'"></span>
+            </div>
+            <div class="space-y-2">
+              <template x-for="m in roleModal.data.matchBreakdown" :key="m.label">
+                <div class="flex items-center gap-3">
+                  <div class="w-24 text-xs text-slate-500 flex-shrink-0" x-text="m.label"></div>
+                  <div class="flex-1 h-1.5 bg-surface-4 rounded-full overflow-hidden">
+                    <div class="h-full rounded-full" :style="'width:' + m.score + '%;background:' + (m.score >= 80 ? '#14B8A6' : m.score >= 60 ? '#6366F1' : '#F59E0B')"></div>
+                  </div>
+                  <div class="w-8 text-xs font-bold text-right" :class="m.score >= 80 ? 'text-teal-400' : 'text-indigo-400'" x-text="m.score + '%'"></div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- Details -->
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="bg-surface-3 rounded-xl p-3 border border-white/[0.04]">
+              <div class="text-xs text-slate-500 mb-0.5">Stipend</div>
+              <div class="font-semibold text-white" x-text="roleModal.data.stipend"></div>
+            </div>
+            <div class="bg-surface-3 rounded-xl p-3 border border-white/[0.04]">
+              <div class="text-xs text-slate-500 mb-0.5">Duration</div>
+              <div class="font-semibold text-white" x-text="roleModal.data.duration"></div>
+            </div>
+            <div class="bg-surface-3 rounded-xl p-3 border border-white/[0.04]">
+              <div class="text-xs text-slate-500 mb-0.5">Type</div>
+              <div class="font-semibold text-white" x-text="roleModal.data.type"></div>
+            </div>
+            <div class="bg-surface-3 rounded-xl p-3 border border-white/[0.04]">
+              <div class="text-xs text-slate-500 mb-0.5">Deadline</div>
+              <div class="font-semibold text-white" x-text="roleModal.data.deadline"></div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">About the Role</p>
+            <p class="text-sm text-slate-400 leading-relaxed" x-text="roleModal.data.description"></p>
+          </div>
+        </div>
+
+        <!-- Footer actions -->
+        <div class="p-6 pt-0 flex gap-3">
+          <button @click="quickApply(roleModal.data); roleModal.open=false"
+                  class="btn-primary flex-1 text-sm font-semibold text-white py-3 rounded-xl">
+            Apply Now
+          </button>
+          <button @click="showToast('Role saved to bookmarks!', 'success'); roleModal.open=false"
+                  class="flex-1 text-sm font-semibold text-slate-300 py-3 rounded-xl bg-surface-3 border border-white/[0.07] hover:bg-surface-4 transition-colors">
+            Save Role
+          </button>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+
+
+<!-- ── Candidate Detail Modal ───────────────────────────── -->
+<div x-show="candidateModal.open" class="fixed inset-0 z-50 flex items-center justify-center p-4"
+     @click.self="candidateModal.open = false">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+  <div x-show="candidateModal.open" class="modal-panel relative glass rounded-3xl w-full max-w-lg border border-white/10 overflow-hidden max-h-[90vh] overflow-y-auto">
+
+    <template x-if="candidateModal.data">
+      <div>
+        <!-- Header -->
+        <div class="p-6 border-b border-white/[0.07]">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-4">
+              <div class="avatar-ring">
+                <div class="w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold text-white"
+                     :style="'background:linear-gradient(135deg,' + candidateModal.data.color1 + ',' + candidateModal.data.color2 + ')'">
+                  <span x-text="candidateModal.data.name[0]"></span>
+                </div>
+              </div>
+              <div>
+                <h2 class="font-display text-lg font-700 text-white" x-text="candidateModal.data.name"></h2>
+                <p class="text-sm text-slate-400" x-text="candidateModal.data.college + ' · ' + candidateModal.data.cgpa + ' CGPA'"></p>
+                <p class="text-xs text-slate-500 mt-0.5" x-text="candidateModal.data.email"></p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="text-right">
+                <div class="text-2xl font-display font-800" :class="candidateModal.data.aiScore >= 85 ? 'text-teal-400' : 'text-indigo-400'" x-text="candidateModal.data.aiScore"></div>
+                <div class="text-xs text-slate-600">AI Score</div>
+              </div>
+              <button @click="candidateModal.open = false" class="text-slate-500 hover:text-white transition-colors p-1">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 space-y-5">
+          <!-- Skills -->
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Skills</p>
+            <div class="flex flex-wrap gap-1.5">
+              <template x-for="skill in candidateModal.data.skills" :key="skill">
+                <span class="text-xs px-2.5 py-1 bg-surface-3 text-slate-300 rounded-lg border border-white/[0.05]" x-text="skill"></span>
+              </template>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Application Timeline</p>
+            <div class="relative pl-5">
+              <div class="absolute left-2 top-2 bottom-2 w-px bg-white/10"></div>
+              <template x-for="(event, idx) in candidateModal.data.timeline" :key="idx">
+                <div class="relative flex items-start gap-3 mb-4">
+                  <div class="absolute -left-3 w-2.5 h-2.5 rounded-full border-2 border-indigo-500 bg-navy-900 mt-0.5"></div>
+                  <div>
+                    <div class="text-sm font-semibold text-white" x-text="event.event"></div>
+                    <div class="text-xs text-slate-500" x-text="event.date"></div>
+                    <div x-if="event.note" class="text-xs text-slate-400 mt-0.5" x-text="event.note"></div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- AI Insights for candidate -->
+          <div class="bg-surface-3 rounded-2xl p-4 border border-indigo-500/10">
+            <p class="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-2">AI Assessment</p>
+            <p class="text-sm text-slate-400 leading-relaxed" x-text="candidateModal.data.aiAssessment"></p>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="p-6 pt-0 flex gap-3">
+          <button @click="moveCandidateForward(candidateModal.data); candidateModal.open=false"
+                  class="btn-primary flex-1 text-sm font-semibold text-white py-3 rounded-xl">
+            Advance Stage
+          </button>
+          <button @click="showToast('Interview scheduled for ' + candidateModal.data.name + '!', 'success'); candidateModal.open=false"
+                  class="btn-teal flex-1 text-sm font-semibold text-white py-3 rounded-xl">
+            Schedule Interview
+          </button>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+
+
+<!-- ── Create Role Modal ────────────────────────────────── -->
+<div x-show="createRoleModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
+     @click.self="createRoleModal = false">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+  <div x-show="createRoleModal" class="modal-panel relative glass rounded-3xl w-full max-w-lg border border-white/10 overflow-hidden">
+    <div class="p-6 border-b border-white/[0.07] flex items-center justify-between">
+      <div>
+        <h2 class="font-display text-lg font-700 text-white">Post New Role</h2>
+        <p class="text-xs text-slate-500 mt-0.5">AI will auto-screen candidates</p>
+      </div>
+      <button @click="createRoleModal = false" class="text-slate-500 hover:text-white transition-colors">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="p-6 space-y-4">
+      <div>
+        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Role Title</label>
+        <input type="text" x-model="newRole.title" placeholder="e.g. Software Engineer Intern" class="cf-input w-full" />
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Type</label>
+          <select x-model="newRole.type" class="cf-input w-full text-slate-300">
+            <option>Internship</option>
+            <option>Full-time</option>
+            <option>Research</option>
+            <option>Contract</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Location</label>
+          <input type="text" x-model="newRole.location" placeholder="e.g. Bangalore" class="cf-input w-full" />
+        </div>
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Stipend / CTC</label>
+        <input type="text" x-model="newRole.stipend" placeholder="e.g. ₹1.5L/mo" class="cf-input w-full" />
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Required Skills (comma separated)</label>
+        <input type="text" x-model="newRole.skills" placeholder="e.g. React, Node.js, Python" class="cf-input w-full" />
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Job Description</label>
+        <textarea x-model="newRole.description" placeholder="Describe the role and requirements…" class="cf-input w-full h-24 resize-none" style="padding-top:10px"></textarea>
+      </div>
+      <div class="flex items-center gap-2 p-3 rounded-xl bg-indigo-500/8 border border-indigo-500/15">
+        <svg class="text-indigo-400 flex-shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <p class="text-xs text-indigo-300">AI will automatically rank and screen applicants based on skills match, GPA, and projects.</p>
+      </div>
+    </div>
+    <div class="p-6 pt-0 flex gap-3">
+      <button @click="publishRole()" class="btn-primary flex-1 text-sm font-semibold text-white py-3 rounded-xl">
+        Publish Role
+      </button>
+      <button @click="createRoleModal = false" class="flex-1 text-sm font-semibold text-slate-400 py-3 rounded-xl bg-surface-3 border border-white/[0.07] hover:bg-surface-4 transition-colors">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     ALPINE.JS APPLICATION LOGIC
+════════════════════════════════════════════════════════════ -->
+<script>
+function campusFlow() {
+  return {
+    // ── State ───────────────────────────────────────────
+    appActive: false,
+    role: 'student',
+    activePage: 'opportunities',
+    sidebarOpen: true,
+    searchQuery: '',
+    filterType: '',
+    candidateSearch: '',
+    candidateFilter: '',
+    aiRunning: false,
+    aiResults: false,
+    aiProgress: 0,
+    aiStep: '',
+    createRoleModal: false,
+    draggedCandidateId: null,
+
+    roleModal: { open: false, data: null },
+    candidateModal: { open: false, data: null },
+
+    newRole: { title: '', type: 'Internship', location: '', stipend: '', skills: '', description: '' },
+
+    aiSuggestions: [
+      'Add quantified achievements — e.g. "Improved page load by 40%"',
+      'Include GitHub and portfolio links in the header',
+      'Add competitive programming ratings (Codeforces, LeetCode)',
+    ],
+
+    aiInsights: [
+      { text: '87% of top candidates for SWE roles have Python on their CV — consider adding it to the JD.', color: '#6366F1', icon: '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' },
+      { text: '3 candidates in "Screened" have been waiting >5 days. Moving them faster improves acceptance rate by 23%.', color: '#14B8A6', icon: '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+      { text: 'Arjun Mehta (AI Score: 94) is being considered by 2 other companies. Recommend fast-tracking.', color: '#EC4899', icon: '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>' },
+    ],
+
+    dashStats: [
+      { label: 'Active Roles', value: '12', change: '+3 this week', iconBg: 'rgba(99,102,241,0.15)', glow: 'stat-glow-indigo', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>' },
+      { label: 'Total Applicants', value: '284', change: '+47 today', iconBg: 'rgba(20,184,166,0.15)', glow: 'stat-glow-teal', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+      { label: 'Offers Extended', value: '18', change: '+5 this month', iconBg: 'rgba(139,92,246,0.15)', glow: 'stat-glow-purple', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' },
+      { label: 'Avg. AI Score', value: '78.4', change: '+2.1 pts', iconBg: 'rgba(236,72,153,0.15)', glow: '', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EC4899" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>' },
+    ],
+
+    // ── Navigation ──────────────────────────────────────
+    studentNav: [
+      { id: 'opportunities', label: 'Opportunities', badge: '8', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>' },
+      { id: 'applications', label: 'My Applications', badge: null, icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>' },
+      { id: 'profile', label: 'My Profile', badge: null, icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
+    ],
+    recruiterNav: [
+      { id: 'dashboard', label: 'Dashboard', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>' },
+      { id: 'pipeline', label: 'Pipeline', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' },
+      { id: 'candidates', label: 'Candidates', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+    ],
+
+    // ── Pipeline stages ─────────────────────────────────
+    pipelineStages: [
+      { id: 'Applied',   label: 'Applied',    color: '#3B82F6' },
+      { id: 'Screened',  label: 'Screened',   color: '#F59E0B' },
+      { id: 'Interview', label: 'Interview',  color: '#8B5CF6' },
+      { id: 'Offered',   label: 'Offered',    color: '#14B8A6' },
+      { id: 'Rejected',  label: 'Not Moved',  color: '#6B7280' },
+    ],
+
+    studentKanbanCols: [
+      { id: 'Applied',   label: 'Applied',   color: '#3B82F6' },
+      { id: 'Screened',  label: 'Shortlisted', color: '#F59E0B' },
+      { id: 'Interview', label: 'Interview', color: '#8B5CF6' },
+      { id: 'Offered',   label: 'Offered',   color: '#14B8A6' },
+    ],
+
+    // ── MOCK DATA ────────────────────────────────────────
+    roles: [
+      {
+        id: 1, title: 'Software Engineer Intern', company: 'Google', type: 'Internship',
+        location: 'Bangalore', stipend: '₹2.4L/mo', deadline: 'Apply by Jul 15',
+        match: 96, remote: false, duration: '3 months',
+        skills: ['Python', 'Algorithms', 'Go', 'Distributed Systems'],
+        color1: '#4285F4', color2: '#34A853',
+        description: 'Join the core infrastructure team working on search ranking systems. You\'ll build scalable distributed components used by billions of users daily.',
+        matchBreakdown: [
+          { label: 'Skills', score: 98 },
+          { label: 'Projects', score: 92 },
+          { label: 'GPA', score: 95 },
+          { label: 'CP Rating', score: 88 },
+        ]
+      },
+      {
+        id: 2, title: 'ML Research Intern', company: 'Microsoft', type: 'Research',
+        location: 'Hyderabad', stipend: '₹1.8L/mo', deadline: 'Apply by Jul 20',
+        match: 89, remote: true, duration: '6 months',
+        skills: ['Python', 'PyTorch', 'NLP', 'Statistics'],
+        color1: '#00A4EF', color2: '#7B68EE',
+        description: 'Work alongside world-class researchers on large language models. Contribute to published research in NLP and vision transformers.',
+        matchBreakdown: [
+          { label: 'Skills', score: 85 },
+          { label: 'Projects', score: 90 },
+          { label: 'GPA', score: 95 },
+          { label: 'Research', score: 72 },
+        ]
+      },
+      {
+        id: 3, title: 'Frontend Engineer', company: 'Razorpay', type: 'Full-time',
+        location: 'Remote', stipend: '₹18LPA', deadline: 'Apply by Aug 1',
+        match: 85, remote: true, duration: 'Permanent',
+        skills: ['React', 'TypeScript', 'CSS', 'Node.js'],
+        color1: '#2B6CB0', color2: '#3182CE',
+        description: 'Build the next generation of payment UI components used by 10M+ businesses across India. Own the design system end to end.',
+        matchBreakdown: [
+          { label: 'Skills', score: 92 },
+          { label: 'Projects', score: 88 },
+          { label: 'GPA', score: 80 },
+          { label: 'Portfolio', score: 85 },
+        ]
+      },
+      {
+        id: 4, title: 'Data Analyst Intern', company: 'Amazon', type: 'Internship',
+        location: 'Remote', stipend: '₹1.5L/mo', deadline: 'Apply by Jul 30',
+        match: 82, remote: true, duration: '3 months',
+        skills: ['SQL', 'Python', 'Tableau', 'Excel'],
+        color1: '#FF9900', color2: '#e47911',
+        description: 'Analyse seller metrics and customer behaviour data at scale. Build dashboards that drive product decisions across APAC marketplace.',
+        matchBreakdown: [
+          { label: 'Skills', score: 78 },
+          { label: 'Projects', score: 82 },
+          { label: 'GPA', score: 88 },
+          { label: 'Analytics', score: 70 },
+        ]
+      },
+      {
+        id: 5, title: 'SDE-1 Intern', company: 'Flipkart', type: 'Internship',
+        location: 'Bangalore', stipend: '₹1.2L/mo', deadline: 'Apply by Aug 5',
+        match: 79, remote: false, duration: '2 months',
+        skills: ['Java', 'Spring Boot', 'MySQL', 'REST APIs'],
+        color1: '#F59E0B', color2: '#D97706',
+        description: 'Work on the supply chain optimisation platform handling millions of orders per day during sale events.',
+        matchBreakdown: [
+          { label: 'Skills', score: 72 },
+          { label: 'Projects', score: 78 },
+          { label: 'GPA', score: 88 },
+          { label: 'DSA', score: 85 },
+        ]
+      },
+      {
+        id: 6, title: 'DevOps Intern', company: 'Atlassian', type: 'Internship',
+        location: 'Remote', stipend: '₹1.6L/mo', deadline: 'Apply by Aug 10',
+        match: 74, remote: true, duration: '4 months',
+        skills: ['Docker', 'Kubernetes', 'CI/CD', 'Linux'],
+        color1: '#0052CC', color2: '#0065FF',
+        description: 'Help build and maintain the CI/CD infrastructure that deploys Jira, Confluence, and Trello to millions of users globally.',
+        matchBreakdown: [
+          { label: 'Skills', score: 68 },
+          { label: 'Projects', score: 72 },
+          { label: 'GPA', score: 80 },
+          { label: 'DevOps', score: 65 },
+        ]
+      },
+      {
+        id: 7, title: 'Product Analyst', company: 'PhonePe', type: 'Full-time',
+        location: 'Pune', stipend: '₹12LPA', deadline: 'Apply by Aug 15',
+        match: 71, remote: false, duration: 'Permanent',
+        skills: ['Analytics', 'SQL', 'A/B Testing', 'Product Thinking'],
+        color1: '#6B21A8', color2: '#9333EA',
+        description: 'Drive product decisions for PhonePe\'s 500M+ user base using data-driven insights and user research.',
+        matchBreakdown: [
+          { label: 'Skills', score: 65 },
+          { label: 'Projects', score: 72 },
+          { label: 'GPA', score: 80 },
+          { label: 'Strategy', score: 68 },
+        ]
+      },
+      {
+        id: 8, title: 'Security Researcher', company: 'Zomato', type: 'Internship',
+        location: 'Gurgaon', stipend: '₹80K/mo', deadline: 'Apply by Aug 20',
+        match: 64, remote: false, duration: '2 months',
+        skills: ['Network Security', 'Python', 'Penetration Testing', 'Linux'],
+        color1: '#EF4444', color2: '#F97316',
+        description: 'Hunt for vulnerabilities in Zomato\'s platform and help secure the systems powering 20M+ food orders daily.',
+        matchBreakdown: [
+          { label: 'Skills', score: 58 },
+          { label: 'Projects', score: 65 },
+          { label: 'GPA', score: 80 },
+          { label: 'Security', score: 52 },
+        ]
+      },
+    ],
+
+    studentApplications: [
+      { id: 1, role: 'SWE Intern', company: 'Google', status: 'Interview', date: 'Jun 18', color1: '#4285F4', color2: '#34A853', aiScore: '96' },
+      { id: 2, role: 'ML Intern', company: 'Microsoft', status: 'Screened', date: 'Jun 20', color1: '#00A4EF', color2: '#7B68EE', aiScore: '89' },
+      { id: 3, role: 'Frontend Eng', company: 'Razorpay', status: 'Applied', date: 'Jun 22', color1: '#2B6CB0', color2: '#3182CE', aiScore: null },
+      { id: 4, role: 'Data Analyst', company: 'Amazon', status: 'Applied', date: 'Jun 22', color1: '#FF9900', color2: '#e47911', aiScore: null },
+      { id: 5, role: 'SDE-1 Intern', company: 'Flipkart', status: 'Offered', date: 'Jun 10', color1: '#F59E0B', color2: '#D97706', aiScore: '82' },
+    ],
+
+    candidates: [
+      {
+        id: 1, name: 'Arjun Mehta', email: 'arjun.mehta@iitb.ac.in', college: 'IIT Bombay',
+        cgpa: '9.2', role: 'SWE Intern — Google JD', stage: 'Interview', aiScore: 94,
+        color1: '#6366F1', color2: '#8B5CF6',
+        skills: ['Python', 'C++', 'Algorithms', 'System Design', 'LeetCode 2100+'],
+        aiAssessment: 'Exceptional problem-solving skills with Codeforces rating 2100+. Published research on graph algorithms. Strongest candidate in this cohort. Recommend fast-tracking to offer.',
+        timeline: [
+          { event: 'Applied', date: 'Jun 10', note: 'Via CampusFlow' },
+          { event: 'AI Screened', date: 'Jun 11', note: 'Score: 94/100' },
+          { event: 'Technical Round 1', date: 'Jun 18', note: 'Cleared with distinction' },
+          { event: 'Interview Scheduled', date: 'Jun 26', note: 'Final round pending' },
+        ]
+      },
+      {
+        id: 2, name: 'Priya Nair', email: 'priya.nair@nit.ac.in', college: 'NIT Trichy',
+        cgpa: '8.9', role: 'ML Research Intern', stage: 'Screened', aiScore: 88,
+        color1: '#14B8A6', color2: '#06B6D4',
+        skills: ['PyTorch', 'NLP', 'Python', 'Statistics', 'TensorFlow'],
+        aiAssessment: 'Strong ML foundation with a published paper on sentiment analysis. Excellent communication skills noted in cover letter. High potential for research role.',
+        timeline: [
+          { event: 'Applied', date: 'Jun 12' },
+          { event: 'AI Screened', date: 'Jun 13', note: 'Score: 88/100' },
+          { event: 'HR Call Completed', date: 'Jun 20' },
+        ]
+      },
+      {
+        id: 3, name: 'Rohan Kapoor', email: 'rohan.k@bits.ac.in', college: 'BITS Pilani',
+        cgpa: '8.4', role: 'Frontend Engineer', stage: 'Applied', aiScore: 81,
+        color1: '#EC4899', color2: '#F97316',
+        skills: ['React', 'TypeScript', 'Tailwind', 'Figma', 'Node.js'],
+        aiAssessment: 'Impressive portfolio with 3 production-grade projects. Strong React skills. Minor gap in backend experience — recommend pairing with senior engineer.',
+        timeline: [
+          { event: 'Applied', date: 'Jun 21' },
+          { event: 'AI Screened', date: 'Jun 22', note: 'Score: 81/100' },
+        ]
+      },
+      {
+        id: 4, name: 'Anjali Singh', email: 'anjali.s@vit.edu', college: 'VIT Vellore',
+        cgpa: '8.7', role: 'Data Analyst Intern', stage: 'Screened', aiScore: 76,
+        color1: '#F59E0B', color2: '#EF4444',
+        skills: ['SQL', 'Python', 'Tableau', 'Power BI', 'Statistics'],
+        aiAssessment: 'Solid data skills with hands-on experience in e-commerce analytics project. Recommend adding one SQL assessment before final decision.',
+        timeline: [
+          { event: 'Applied', date: 'Jun 14' },
+          { event: 'AI Screened', date: 'Jun 15', note: 'Score: 76/100' },
+          { event: 'Assignment Sent', date: 'Jun 22' },
+        ]
+      },
+      {
+        id: 5, name: 'Kiran Reddy', email: 'kiran.r@iitm.ac.in', college: 'IIT Madras',
+        cgpa: '9.0', role: 'SWE Intern — Google JD', stage: 'Offered', aiScore: 91,
+        color1: '#10B981', color2: '#059669',
+        skills: ['C++', 'Java', 'Competitive Programming', 'OS', 'Networks'],
+        aiAssessment: 'Outstanding DSA skills — top 1% on Codeforces. Strong fundamentals in OS and networks. Excellent culture fit based on video screening.',
+        timeline: [
+          { event: 'Applied', date: 'Jun 5' },
+          { event: 'AI Screened', date: 'Jun 6', note: 'Score: 91/100' },
+          { event: 'Technical Round 1', date: 'Jun 12' },
+          { event: 'Technical Round 2', date: 'Jun 19' },
+          { event: 'Offer Extended', date: 'Jun 24', note: '🎉 ₹2.4L/mo' },
+        ]
+      },
+      {
+        id: 6, name: 'Meera Iyer', email: 'meera.i@manipal.edu', college: 'Manipal Institute',
+        cgpa: '8.1', role: 'DevOps Intern', stage: 'Applied', aiScore: 68,
+        color1: '#0052CC', color2: '#8B5CF6',
+        skills: ['Linux', 'Docker', 'Bash', 'AWS', 'Git'],
+        aiAssessment: 'Decent DevOps fundamentals with practical experience on personal projects. Recommend a hands-on technical assessment to verify Kubernetes skills.',
+        timeline: [
+          { event: 'Applied', date: 'Jun 23' },
+          { event: 'AI Screened', date: 'Jun 24', note: 'Score: 68/100' },
+        ]
+      },
+    ],
+
+    // ── Computed ─────────────────────────────────────────
+    get filteredRoles() {
+      return this.roles.filter(r => {
+        const q = this.searchQuery.toLowerCase()
+        const matchSearch = !q || r.title.toLowerCase().includes(q) || r.company.toLowerCase().includes(q) || r.skills.some(s => s.toLowerCase().includes(q))
+        const matchFilter = !this.filterType || r.type === this.filterType
+        return matchSearch && matchFilter
+      })
+    },
+
+    get filteredCandidates() {
+      return this.candidates.filter(c => {
+        const q = this.candidateSearch.toLowerCase()
+        const matchSearch = !q || c.name.toLowerCase().includes(q) || c.college.toLowerCase().includes(q) || c.role.toLowerCase().includes(q)
+        const matchFilter = !this.candidateFilter || c.stage === this.candidateFilter
+        return matchSearch && matchFilter
+      })
+    },
+
+    // ── Methods ──────────────────────────────────────────
+    init() {
+      // Animate progress rings after load
+      setTimeout(() => {
+        document.querySelectorAll('.progress-ring-fill').forEach(el => {
+          const offset = el.getAttribute('stroke-dashoffset')
+          el.style.strokeDashoffset = '113'
+          requestAnimationFrame(() => {
+            setTimeout(() => { el.style.strokeDashoffset = offset }, 100)
+          })
+        })
+      }, 300)
+    },
+
+    enterApp(r) {
+      this.role = r
+      this.activePage = r === 'student' ? 'opportunities' : 'dashboard'
+      document.getElementById('landing').style.display = 'none'
+      this.appActive = true
+    },
+
+    exitApp() {
+      document.getElementById('landing').style.display = 'flex'
+      this.appActive = false
+    },
+
+    switchRole(r) {
+      this.role = r
+      this.activePage = r === 'student' ? 'opportunities' : 'dashboard'
+      this.showToast(`Switched to ${r === 'student' ? 'Student' : 'Recruiter'} view`, 'info')
+    },
+
+    openRoleModal(role_item) {
+      this.roleModal.data = role_item
+      this.roleModal.open = true
+    },
+
+    openCandidateModal(cand) {
+      this.candidateModal.data = cand
+      this.candidateModal.open = true
+    },
+
+    openCreateRole() {
+      this.createRoleModal = true
+      this.newRole = { title: '', type: 'Internship', location: '', stipend: '', skills: '', description: '' }
+    },
+
+    quickApply(role_item) {
+      // Check if already applied
+      const existing = this.studentApplications.find(a => a.company === role_item.company && a.role === role_item.title.substring(0, 15))
+      if (existing) {
+        this.showToast(`Already applied to ${role_item.company}!`, 'warning')
+        return
+      }
+      this.studentApplications.push({
+        id: Date.now(),
+        role: role_item.title.substring(0, 20),
+        company: role_item.company,
+        status: 'Applied',
+        date: 'Just now',
+        color1: role_item.color1,
+        color2: role_item.color2,
+        aiScore: null
+      })
+      this.showToast(`Application submitted to ${role_item.company}! 🎉`, 'success')
+      this.launchConfetti()
+    },
+
+    publishRole() {
+      if (!this.newRole.title) { this.showToast('Please enter a role title', 'error'); return }
+      this.createRoleModal = false
+      this.showToast(`"${this.newRole.title}" posted successfully! AI screening active.`, 'success')
+    },
+
+    moveCandidateForward(cand) {
+      const stages = ['Applied', 'Screened', 'Interview', 'Offered']
+      const idx = stages.indexOf(cand.stage)
+      if (idx < stages.length - 1) {
+        cand.stage = stages[idx + 1]
+        this.showToast(`${cand.name} moved to ${cand.stage}`, 'success')
+      } else {
+        this.showToast(`${cand.name} is already at the final stage`, 'info')
+      }
+    },
+
+    // ── AI Optimizer ─────────────────────────────────────
+    async runAIOptimizer() {
+      if (this.aiRunning) return
+      this.aiRunning = true
+      this.aiResults = false
+      this.aiProgress = 0
+
+      const steps = [
+        { msg: 'Parsing resume structure…', pct: 20 },
+        { msg: 'Analysing keyword density & ATS compatibility…', pct: 45 },
+        { msg: 'Matching against 2,400 job descriptions…', pct: 68 },
+        { msg: 'Generating personalised suggestions…', pct: 88 },
+        { msg: 'Finalising report…', pct: 100 },
+      ]
+      for (const step of steps) {
+        await new Promise(r => setTimeout(r, 600))
+        this.aiStep = step.msg
+        this.aiProgress = step.pct
+      }
+      await new Promise(r => setTimeout(r, 300))
+      this.aiRunning = false
+      this.aiResults = true
+      this.showToast('AI Resume analysis complete! Score: 91/100', 'success')
+    },
+
+    handleFileDrop(e) {
+      const file = e.dataTransfer.files[0]
+      if (file) { this.showToast(`"${file.name}" uploaded. Running AI analysis…`, 'info'); this.runAIOptimizer() }
+    },
+
+    // ── Drag & Drop (Pipeline) ───────────────────────────
+    onDragStart(e, candId) {
+      this.draggedCandidateId = candId
+      e.target.classList.add('dragging')
+      e.dataTransfer.effectAllowed = 'move'
+    },
+
+    onDragEnd(e) {
+      e.target.classList.remove('dragging')
+    },
+
+    onDragOver(e) {
+      e.preventDefault()
+      const col = e.currentTarget
+      col.classList.add('drag-over')
+    },
+
+    onDragLeave(e) {
+      e.currentTarget.classList.remove('drag-over')
+    },
+
+    onDrop(e, stageId) {
+      e.currentTarget.classList.remove('drag-over')
+      const cand = this.candidates.find(c => c.id === this.draggedCandidateId)
+      if (cand && cand.stage !== stageId) {
+        const oldStage = cand.stage
+        cand.stage = stageId
+        this.showToast(`${cand.name} moved: ${oldStage} → ${stageId}`, 'success')
+      }
+      this.draggedCandidateId = null
+    },
+
+    // ── Toast System ─────────────────────────────────────
+    showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container')
+      const toast = document.createElement('div')
+      toast.className = 'toast'
+
+      const icons = {
+        success: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+        error:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+        warning: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+        info:    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+      }
+
+      const dotColors = { success: '#14B8A6', error: '#EF4444', warning: '#F59E0B', info: '#6366F1' }
+
+      toast.innerHTML = `
+        <div style="width:6px;height:6px;border-radius:50%;background:${dotColors[type]};flex-shrink:0"></div>
+        ${icons[type]}
+        <span style="flex:1;font-size:13px">${message}</span>
+        <button onclick="this.parentElement.classList.add('toast-out');setTimeout(()=>this.parentElement.remove(),250)" style="color:rgba(148,163,184,0.6);padding:2px;border-radius:4px;background:none;border:none;cursor:pointer;font-size:16px;line-height:1">×</button>
+      `
+      container.appendChild(toast)
+      setTimeout(() => {
+        toast.classList.add('toast-out')
+        setTimeout(() => toast.remove(), 250)
+      }, 4000)
+    },
+
+    // ── Confetti ─────────────────────────────────────────
+    launchConfetti() {
+      const container = document.getElementById('confetti-container')
+      const colors = ['#6366F1', '#14B8A6', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981', '#06B6D4']
+      for (let i = 0; i < 60; i++) {
+        const piece = document.createElement('div')
+        piece.className = 'confetti-piece'
+        const size = Math.random() * 8 + 4
+        piece.style.cssText = `
+          left: ${Math.random() * 100}vw;
+          top: -20px;
+          width: ${size}px;
+          height: ${size}px;
+          background: ${colors[Math.floor(Math.random() * colors.length)]};
+          border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+          animation-delay: ${Math.random() * 0.8}s;
+          animation-duration: ${1.8 + Math.random() * 1}s;
+        `
+        container.appendChild(piece)
+        setTimeout(() => piece.remove(), 3000)
+      }
+    },
+  }
+}
+</script>
+
+</body>
+</html>
