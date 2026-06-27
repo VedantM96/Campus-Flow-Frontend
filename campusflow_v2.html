@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CampusFlow — AI Recruitment Pipeline</title>
+  <title>CampusFlow — Advanced AI Recruitment Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -45,8 +45,6 @@
 
     /* ── Typography ── */
     .gradient-text { background: linear-gradient(130deg, #818CF8, #34D399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .gradient-text-warm { background: linear-gradient(130deg, #A78BFA, #F472B6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .gradient-text-gold { background: linear-gradient(130deg, #FBBF24, #F97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
     /* ── Buttons ── */
     .btn-primary { background: linear-gradient(135deg, #6366F1, #818CF8); transition: all .22s; box-shadow: 0 4px 18px rgba(99,102,241,.28); }
@@ -56,7 +54,6 @@
     .btn-teal:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(20,184,166,.4); }
     .btn-ghost { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); transition: all .18s; }
     .btn-ghost:hover { background: rgba(255,255,255,.08); border-color: rgba(99,102,241,.3); }
-    .btn-danger { background: linear-gradient(135deg, #DC2626, #EF4444); box-shadow: 0 4px 14px rgba(239,68,68,.22); transition: all .2s; }
 
     /* ── Cards ── */
     .card-lift { transition: transform .2s, box-shadow .2s, border-color .2s; }
@@ -73,10 +70,6 @@
     /* ── Badges ── */
     .badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; letter-spacing: .02em; white-space: nowrap; }
 
-    /* ── Progress rings ── */
-    .progress-ring { transform: rotate(-90deg); }
-    .ring-fill { transition: stroke-dashoffset 1.4s cubic-bezier(.16,1,.3,1); }
-
     /* ── Animated border ── */
     .animated-border { background: linear-gradient(90deg, #6366F1, #14B8A6, #8B5CF6, #6366F1); background-size: 300% 100%; animation: gradientShift 4s ease infinite; }
     @keyframes gradientShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
@@ -85,21 +78,14 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes slideInRight { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: translateX(0); } }
-    @keyframes pulseGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(99,102,241,.35); } 50% { box-shadow: 0 0 0 8px rgba(99,102,241,.0); } }
-    @keyframes scanLine { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
-    @keyframes confettiFall { from { transform: translateY(-20px) rotate(0deg); opacity:1; } to { transform: translateY(120vh) rotate(720deg); opacity:0; } }
     @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+    @keyframes pulseGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(99,102,241,.35); } 50% { box-shadow: 0 0 0 8px rgba(99,102,241,.0); } }
+    @keyframes confettiFall { from { transform: translateY(-20px) rotate(0deg); opacity:1; } to { transform: translateY(120vh) rotate(720deg); opacity:0; } }
 
     .animate-fade-in { animation: fadeIn .38s ease-out; }
     .animate-slide-up { animation: slideUp .32s cubic-bezier(.16,1,.3,1); }
-    .animate-slide-right { animation: slideInRight .32s cubic-bezier(.16,1,.3,1); }
     .animate-float { animation: float 4s ease-in-out infinite; }
-    .animate-pulse-glow { animation: pulseGlow 2.5s infinite; }
     .animate-pulse-slow { animation: pulse 3.5s cubic-bezier(.4,0,.6,1) infinite; }
-
-    /* ── Skeleton loader ── */
-    .skeleton { background: linear-gradient(90deg, rgba(255,255,255,.04) 25%, rgba(255,255,255,.08) 50%, rgba(255,255,255,.04) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
 
     /* ── Toast ── */
     #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column-reverse; gap: 10px; }
@@ -118,25 +104,9 @@
     .stage-badge-waitlisted { background: rgba(249,115,22,.12); color: #FB923C; border: 1px solid rgba(249,115,22,.2); }
     .stage-badge-rejected { background: rgba(239,68,68,.1); color: #FCA5A5; border: 1px solid rgba(239,68,68,.2); }
 
-    /* ── AI typing cursor ── */
-    .typing-cursor::after { content: '|'; animation: blink .7s step-end infinite; }
-    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
-
-    /* ── Drag & drop ── */
-    .drag-over { border: 2px dashed rgba(99,102,241,.55) !important; background: rgba(99,102,241,.04) !important; }
-    .dragging { opacity: .5; transform: rotate(2deg); cursor: grabbing !important; }
-
-    /* ── Nav ── */
-    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; cursor: pointer; transition: all .18s; font-size: 13.5px; font-weight: 500; color: #64748B; white-space: nowrap; }
-    .nav-item:hover { background: rgba(99,102,241,.08); color: #94A3B8; }
-    .nav-item.active { background: rgba(99,102,241,.14); color: #818CF8; }
-    .nav-item svg { flex-shrink: 0; }
-
-    /* ── Score ring colors ── */
-    .score-excellent { color: #34D399; }
-    .score-good { color: #818CF8; }
-    .score-avg { color: #FBBF24; }
-    .score-poor { color: #F87171; }
+    /* ── Upload zone ── */
+    .upload-zone { border: 2px dashed rgba(255,255,255,.1); border-radius: 14px; padding: 32px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; }
+    .upload-zone:hover, .upload-zone.dragging-file { border-color: rgba(99,102,241,.5); background: rgba(99,102,241,.05); }
 
     /* ── AI Chat bubble ── */
     .ai-bubble { background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.2); border-radius: 0 16px 16px 16px; padding: 12px 14px; }
@@ -165,15 +135,17 @@
     .step-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(99,102,241,.4), rgba(99,102,241,.1)); }
     .step-line.done { background: linear-gradient(90deg, #34D399, #14B8A6); }
 
-    /* ── Upload zone ── */
-    .upload-zone { border: 2px dashed rgba(255,255,255,.1); border-radius: 14px; padding: 32px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; }
-    .upload-zone:hover, .upload-zone.dragging-file { border-color: rgba(99,102,241,.5); background: rgba(99,102,241,.05); }
-
     /* ── AI thinking dots ── */
     .thinking-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #818CF8; animation: thinkDot 1.4s ease-in-out infinite; }
     .thinking-dot:nth-child(2) { animation-delay: .2s; }
     .thinking-dot:nth-child(3) { animation-delay: .4s; }
     @keyframes thinkDot { 0%,80%,100% { transform: scale(0.6); opacity:.4; } 40% { transform: scale(1); opacity:1; } }
+
+    /* ── Nav Item ── */
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; cursor: pointer; transition: all .18s; font-size: 13.5px; font-weight: 500; color: #64748B; white-space: nowrap; }
+    .nav-item:hover { background: rgba(99,102,241,.08); color: #94A3B8; }
+    .nav-item.active { background: rgba(99,102,241,.14); color: #818CF8; }
+    .nav-item svg { flex-shrink: 0; }
 
     /* ── Weightage slider ── */
     input[type=range] { -webkit-appearance: none; height: 4px; border-radius: 4px; background: rgba(255,255,255,.08); outline: none; }
@@ -188,15 +160,12 @@
 <div id="toast-container"></div>
 <div id="confetti-container" class="pointer-events-none"></div>
 
-<!-- ═══════════════════════ LANDING ═══════════════════════ -->
 <div id="landing" x-show="page === 'landing'" class="mesh grid-bg min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-6">
 
-  <!-- Orbit decorations -->
   <div class="orbit-ring w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2" style="left:50%;top:50%;position:absolute;animation:float 8s ease-in-out infinite;"></div>
   <div class="absolute top-24 left-[8%] w-64 h-64 bg-indigo-500/8 rounded-full blur-3xl animate-pulse-slow"></div>
   <div class="absolute bottom-24 right-[8%] w-80 h-80 bg-teal-500/7 rounded-full blur-3xl animate-pulse-slow" style="animation-delay:2s"></div>
 
-  <!-- Nav -->
   <nav class="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-8 py-5">
     <div class="flex items-center gap-2.5">
       <div class="w-8 h-8 rounded-xl btn-primary flex items-center justify-center">
@@ -205,42 +174,40 @@
       <span class="font-display font-700 text-lg text-white tracking-tight">CampusFlow</span>
     </div>
     <div class="flex items-center gap-2">
-      <button @click="enterAs('applicant')" class="btn-ghost text-sm font-medium text-slate-300 px-4 py-2 rounded-lg">Sign In</button>
-      <button @click="enterAs('applicant')" class="btn-primary text-sm font-semibold text-white px-5 py-2 rounded-lg">Get Started</button>
+      <button @click="page = 'login'" class="btn-ghost text-sm font-medium text-slate-300 px-4 py-2 rounded-lg">Sign In</button>
+      <button @click="page = 'register'" class="btn-primary text-sm font-semibold text-white px-5 py-2 rounded-lg">Get Started</button>
     </div>
   </nav>
 
-  <!-- Hero -->
   <div class="relative z-10 text-center max-w-4xl mx-auto pt-20 pb-10 animate-fade-in">
     <div class="inline-flex items-center gap-2 mb-7 px-3.5 py-1.5 rounded-full glass border border-indigo-500/25 text-xs font-semibold text-indigo-300 tracking-wide">
       <span class="w-1.5 h-1.5 rounded-full bg-teal-400 glow-dot-teal animate-pulse"></span>
-      AI-Powered Campus Recruitment · BuildSprint 2026
+      Neural Expressive AI & Pipeline Architecture · BuildSprint 2026
     </div>
 
     <h1 class="font-display text-5xl md:text-[68px] font-700 text-white leading-[1.05] tracking-tight mb-5">
       Recruitment That<br/><span class="gradient-text">Actually Makes Sense.</span>
     </h1>
     <p class="text-base text-slate-400 max-w-lg mx-auto mb-10 leading-relaxed">
-      Structured pipelines, AI-scored CVs, personalised interview questions, and instant results — all in one campus-native platform.
+      Structured pipelines, AI-scored CVs, personalized interview metrics, and expressive interactive tracking layers — all in one unified campus framework.
     </p>
 
-    <!-- Role cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-10">
-      <button @click="enterAs('applicant')" class="glass card-lift rounded-2xl p-5 text-left border border-white/[.06] group">
+      <button @click="authRole = 'applicant'; page = 'register'" class="glass card-lift rounded-2xl p-5 text-left border border-white/[.06] group">
         <div class="w-9 h-9 rounded-xl bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center mb-3">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#818CF8" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
         <div class="text-sm font-semibold text-white mb-1">Applicant</div>
         <div class="text-xs text-slate-500 leading-relaxed">Discover drives, submit CV, take AI interview round</div>
       </button>
-      <button @click="enterAs('admin')" class="glass card-lift rounded-2xl p-5 text-left border border-white/[.06]">
+      <button @click="authRole = 'admin'; page = 'register'" class="glass card-lift rounded-2xl p-5 text-left border border-white/[.06]">
         <div class="w-9 h-9 rounded-xl bg-teal-500/15 border border-teal-500/25 flex items-center justify-center mb-3">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
         </div>
         <div class="text-sm font-semibold text-white mb-1">Admin</div>
         <div class="text-xs text-slate-500 leading-relaxed">Create orgs, open drives, manage pipeline & results</div>
       </button>
-      <button @click="enterAs('interviewer')" class="glass card-lift rounded-2xl p-5 text-left border border-white/[.06]">
+      <button @click="authRole = 'interviewer'; page = 'register'" class="glass card-lift rounded-2xl p-5 text-left border border-white/[.06]">
         <div class="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-500/25 flex items-center justify-center mb-3">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C4B5FD" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
@@ -249,7 +216,6 @@
       </button>
     </div>
 
-    <!-- Stats -->
     <div class="flex flex-wrap items-center justify-center gap-8 text-sm text-slate-500">
       <div class="flex items-center gap-2"><span class="text-2xl font-display font-700 gradient-text">94%</span><span>AI Match Accuracy</span></div>
       <div class="w-px h-7 bg-white/10 hidden sm:block"></div>
@@ -260,10 +226,103 @@
   </div>
 </div>
 
-<!-- ═══════════════════════ APP SHELL ═══════════════════════ -->
-<div x-show="page !== 'landing'" class="flex min-h-screen">
+<div x-show="page === 'login'" class="mesh grid-bg min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-6" x-cloak>
+  <div class="relative z-10 w-full max-w-md animate-fade-in">
+    <div class="glass rounded-3xl p-8 border border-white/[.06] shadow-2xl relative">
+      <button @click="page = 'landing'" class="absolute -top-10 left-0 text-xs font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to Home
+      </button>
+      <div class="flex justify-center mb-6">
+        <div class="w-14 h-14 rounded-2xl btn-primary flex items-center justify-center shadow-lg shadow-indigo-500/25">
+          <svg width="24" height="24" viewBox="0 0 16 16" fill="none"><path d="M3 12L8 3L13 12" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 9H10.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <h2 class="font-display text-2xl font-700 text-white text-center mb-2">Welcome Back</h2>
+      <p class="text-sm text-slate-400 text-center mb-6">Sign in to continue to CampusFlow</p>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Email Address</label>
+          <input type="email" placeholder="you@university.ac.in" class="cf-input" />
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Password</label>
+          <input type="password" placeholder="••••••••" class="cf-input" />
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block text-indigo-300">Demo Simulation Role</label>
+          <select x-model="authRole" class="cf-select w-full border-indigo-500/30">
+            <option value="applicant">Applicant / Student (Vedant)</option>
+            <option value="admin">Platform Admin (TechCorp)</option>
+            <option value="interviewer">Technical Interviewer (Dr. Mehta)</option>
+          </select>
+          <p class="text-[10px] text-slate-500 mt-1.5">Select a role to preview the different dashboard experiences.</p>
+        </div>
+        <button @click="enterAs(authRole)" class="btn-primary w-full text-sm font-semibold text-white py-3.5 rounded-xl mt-2 flex justify-center items-center gap-2">
+          Sign In
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      
+      <p class="text-xs text-center text-slate-500 mt-6">
+        Don't have an account? <button @click="page = 'register'" class="text-indigo-400 font-semibold hover:text-indigo-300 transition">Create one</button>
+      </p>
+    </div>
+  </div>
+</div>
 
-  <!-- ── SIDEBAR ── -->
+<div x-show="page === 'register'" class="mesh grid-bg min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-6" x-cloak>
+  <div class="relative z-10 w-full max-w-md animate-fade-in">
+    <div class="glass rounded-3xl p-8 border border-white/[.06] shadow-2xl relative">
+      <button @click="page = 'landing'" class="absolute -top-10 left-0 text-xs font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to Home
+      </button>
+      <div class="flex justify-center mb-6">
+        <div class="w-14 h-14 rounded-2xl btn-primary flex items-center justify-center shadow-lg shadow-indigo-500/25">
+          <svg width="24" height="24" viewBox="0 0 16 16" fill="none"><path d="M3 12L8 3L13 12" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 9H10.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <h2 class="font-display text-2xl font-700 text-white text-center mb-2">Create Account</h2>
+      <p class="text-sm text-slate-400 text-center mb-6">Join the AI-powered recruitment pipeline</p>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Full Name</label>
+          <input type="text" placeholder="Vedant Sharma" class="cf-input" />
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">University Email</label>
+          <input type="email" placeholder="vedant@nitraipur.ac.in" class="cf-input" />
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Password</label>
+          <input type="password" placeholder="••••••••" class="cf-input" />
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block text-indigo-300">Join As (Demo Simulation)</label>
+          <select x-model="authRole" class="cf-select w-full border-indigo-500/30">
+            <option value="applicant">Applicant / Student</option>
+            <option value="admin">University / Recruiter Admin</option>
+            <option value="interviewer">Interviewer</option>
+          </select>
+        </div>
+        <button @click="enterAs(authRole)" class="btn-primary w-full text-sm font-semibold text-white py-3.5 rounded-xl mt-2 flex justify-center items-center gap-2">
+          Create Account
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      
+      <p class="text-xs text-center text-slate-500 mt-6">
+        Already have an account? <button @click="page = 'login'" class="text-indigo-400 font-semibold hover:text-indigo-300 transition">Sign in</button>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div x-show="!['landing', 'login', 'register'].includes(page)" class="flex min-h-screen">
+
   <aside class="w-56 flex-shrink-0 flex flex-col glass border-r border-white/[.05] sticky top-0 h-screen overflow-y-auto">
     <div class="p-4 border-b border-white/[.05] flex items-center gap-2.5">
       <div class="w-7 h-7 rounded-lg btn-primary flex items-center justify-center">
@@ -272,7 +331,6 @@
       <span class="font-display font-700 text-white text-base">CampusFlow</span>
     </div>
 
-    <!-- Role chip -->
     <div class="px-4 py-3">
       <div class="flex items-center gap-2 px-3 py-2 rounded-xl glass-light">
         <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
@@ -286,9 +344,7 @@
       </div>
     </div>
 
-    <!-- Nav items -->
     <nav class="flex-1 px-3 py-2 space-y-0.5">
-      <!-- Applicant nav -->
       <template x-if="page === 'applicant'">
         <div class="space-y-0.5">
           <div @click="subpage = 'discover'" class="nav-item" :class="subpage==='discover' ? 'active' : ''">
@@ -310,7 +366,6 @@
         </div>
       </template>
 
-      <!-- Admin nav -->
       <template x-if="page === 'admin'">
         <div class="space-y-0.5">
           <div @click="subpage = 'dashboard'" class="nav-item" :class="subpage==='dashboard' ? 'active' : ''">
@@ -336,7 +391,6 @@
         </div>
       </template>
 
-      <!-- Interviewer nav -->
       <template x-if="page === 'interviewer'">
         <div class="space-y-0.5">
           <div @click="subpage = 'assigned'" class="nav-item" :class="subpage==='assigned' ? 'active' : ''">
@@ -351,7 +405,6 @@
       </template>
     </nav>
 
-    <!-- Switch role -->
     <div class="p-3 border-t border-white/[.05] space-y-1">
       <div class="text-[10px] text-slate-600 uppercase tracking-wider px-2 mb-1">Switch View</div>
       <button @click="enterAs('applicant')" class="w-full text-left nav-item text-xs" :class="page==='applicant'?'active':''">
@@ -363,29 +416,25 @@
       <button @click="enterAs('interviewer')" class="w-full text-left nav-item text-xs" :class="page==='interviewer'?'active':''">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Interviewer
       </button>
-      <button @click="page='landing'; subpage=''" class="w-full text-left nav-item text-xs text-slate-600">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Landing
+      <button @click="page='landing'; subpage=''" class="w-full text-left nav-item text-xs text-red-400 hover:text-red-300 mt-2 hover:bg-red-500/10">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Sign Out
       </button>
     </div>
   </aside>
 
-  <!-- ── MAIN CONTENT ── -->
   <main class="flex-1 overflow-y-auto bg-[#050B18]">
 
-    <!-- ═══════ APPLICANT: DISCOVER ═══════ -->
     <div x-show="page === 'applicant' && subpage === 'discover'" class="p-6 animate-fade-in">
       <div class="mb-6">
         <h1 class="font-display text-2xl font-700 text-white">Discover Drives</h1>
         <p class="text-sm text-slate-500 mt-1">Active recruitment drives open for applications</p>
       </div>
 
-      <!-- Search bar -->
       <div class="relative mb-5">
         <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <input type="text" x-model="searchQuery" placeholder="Search by org, role, or domain…" class="cf-input pl-10" />
       </div>
 
-      <!-- Drive cards grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <template x-for="drive in filteredDrives" :key="drive.id">
           <div class="glass rounded-2xl p-5 border border-white/[.06] card-lift cursor-pointer" @click="openDriveModal(drive)">
@@ -413,7 +462,6 @@
               <span><span class="text-white font-semibold" x-text="drive.applicants"></span> applicants</span>
               <span>Deadline: <span class="text-slate-300" x-text="drive.deadline"></span></span>
             </div>
-            <!-- Pipeline stages preview -->
             <div class="mt-3 flex items-center gap-1.5">
               <template x-for="(stage, i) in ['CV Screen', 'AI Round', 'PI Round', 'Results']" :key="i">
                 <div class="flex items-center gap-1.5">
@@ -427,12 +475,10 @@
       </div>
     </div>
 
-    <!-- ═══════ APPLICANT: APPLY ═══════ -->
     <div x-show="page === 'applicant' && subpage === 'apply'" class="p-6 animate-fade-in max-w-2xl">
       <h1 class="font-display text-2xl font-700 text-white mb-1">Submit Application</h1>
       <p class="text-sm text-slate-500 mb-6">Complete your profile and upload your CV to apply</p>
 
-      <!-- Drive selector -->
       <div class="glass rounded-2xl p-5 border border-white/[.06] mb-4">
         <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">Applying for Drive</label>
         <div class="flex items-center gap-3 p-3 bg-indigo-500/8 rounded-xl border border-indigo-500/2">
@@ -445,7 +491,6 @@
         </div>
       </div>
 
-      <!-- Form -->
       <div class="glass rounded-2xl p-5 border border-white/[.06] space-y-4">
         <div class="grid grid-cols-2 gap-4">
           <div>
@@ -466,7 +511,6 @@
           </div>
         </div>
 
-        <!-- CV Upload -->
         <div>
           <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">Upload CV (PDF)</label>
           <div class="upload-zone"
@@ -487,12 +531,11 @@
       </div>
     </div>
 
-    <!-- ═══════ APPLICANT: AI ROUND ═══════ -->
     <div x-show="page === 'applicant' && subpage === 'ai-round'" class="p-6 animate-fade-in max-w-3xl">
       <div class="flex items-center justify-between mb-6">
         <div>
           <h1 class="font-display text-2xl font-700 text-white">AI Interview Round</h1>
-          <p class="text-sm text-slate-500 mt-1">Personalised questions generated from your CV + role requirements</p>
+          <p class="text-sm text-slate-500 mt-1">Personalized questions generated from your CV + role requirements</p>
         </div>
         <div x-show="aiRound.started && !aiRound.submitted" class="flex items-center gap-2 px-4 py-2 rounded-xl glass border border-red-500/20">
           <div class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></div>
@@ -500,13 +543,12 @@
         </div>
       </div>
 
-      <!-- Not started yet -->
       <div x-show="!aiRound.started && !aiRound.submitted" class="glass rounded-2xl p-8 border border-white/[.06] text-center">
         <div class="w-16 h-16 rounded-2xl mx-auto mb-5 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center animate-float">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         </div>
         <h2 class="font-display text-xl font-600 text-white mb-2">AI Interview Round</h2>
-        <p class="text-sm text-slate-400 mb-2 max-w-md mx-auto">Claude AI has analysed your CV and generated <span class="text-indigo-400 font-semibold">6 personalised questions</span> specific to your background and the role requirements.</p>
+        <p class="text-sm text-slate-400 mb-2 max-w-md mx-auto">Gemini Pro has analyzed your CV and generated <span class="text-indigo-400 font-semibold">6 personalized deep-reasoning queries</span> specific to your engineering skillset.</p>
         <p class="text-xs text-slate-500 mb-6">⏱ 45 minutes · Answer each question thoughtfully · Questions appear one by one</p>
         <div class="flex flex-col gap-3 max-w-xs mx-auto">
           <button @click="generateAIQuestions()" :disabled="aiRound.generatingQuestions" class="btn-primary text-sm font-semibold text-white py-3 rounded-xl flex items-center justify-center gap-2">
@@ -521,9 +563,7 @@
         </div>
       </div>
 
-      <!-- Active interview -->
       <div x-show="aiRound.started && !aiRound.submitted">
-        <!-- Progress bar -->
         <div class="flex items-center gap-2 mb-5">
           <template x-for="(q, i) in aiRound.questions" :key="i">
             <div class="flex-1 h-1.5 rounded-full transition-all duration-500"
@@ -532,14 +572,13 @@
         </div>
         <div class="text-xs text-slate-500 mb-4">Question <span class="text-white font-semibold" x-text="aiRound.currentQ + 1"></span> of <span x-text="aiRound.questions.length"></span></div>
 
-        <!-- Question card -->
         <div class="glass rounded-2xl p-6 border border-indigo-500/15 mb-4">
           <div class="flex items-start gap-3 mb-5">
             <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
             </div>
             <div>
-              <div class="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider mb-1">AI Generated · Personalised</div>
+              <div class="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider mb-1">AI Generated · Personalized</div>
               <p class="text-base text-white leading-relaxed font-medium" x-text="aiRound.questions[aiRound.currentQ]?.text || ''"></p>
             </div>
           </div>
@@ -557,7 +596,6 @@
         </div>
       </div>
 
-      <!-- Submitted / score -->
       <div x-show="aiRound.submitted" class="animate-slide-up">
         <div class="glass rounded-2xl p-8 border border-teal-500/20 text-center mb-4">
           <div class="w-16 h-16 rounded-full mx-auto mb-4 bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-3xl">✓</div>
@@ -585,7 +623,6 @@
       </div>
     </div>
 
-    <!-- ═══════ APPLICANT: MY STATUS ═══════ -->
     <div x-show="page === 'applicant' && subpage === 'my-status'" class="p-6 animate-fade-in">
       <h1 class="font-display text-2xl font-700 text-white mb-1">My Applications</h1>
       <p class="text-sm text-slate-500 mb-6">Track your status across all active drives</p>
@@ -604,7 +641,6 @@
                   <span class="badge" :class="`stage-badge-${app.stage.toLowerCase().replace(' ','-')}`" x-text="app.stage"></span>
                 </div>
                 <div class="text-xs text-slate-500 mb-3" x-text="app.role"></div>
-                <!-- Pipeline visual -->
                 <div class="flex items-center gap-1">
                   <template x-for="(s, si) in ['Applied', 'AI Screening', 'PI Round', 'Results']" :key="si">
                     <div class="flex items-center gap-1">
@@ -625,7 +661,6 @@
       </div>
     </div>
 
-    <!-- ═══════ ADMIN: DASHBOARD ═══════ -->
     <div x-show="page === 'admin' && subpage === 'dashboard'" class="p-6 animate-fade-in">
       <div class="flex items-center justify-between mb-6">
         <div>
@@ -638,7 +673,6 @@
         </button>
       </div>
 
-      <!-- Stat cards -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <template x-for="stat in adminStats" :key="stat.label">
           <div class="glass rounded-2xl p-5 border border-white/[.06] card-lift">
@@ -654,7 +688,6 @@
         </template>
       </div>
 
-      <!-- Active drives + AI insights -->
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
         <div class="lg:col-span-3 glass rounded-2xl p-5 border border-white/[.06]">
           <div class="flex items-center justify-between mb-4">
@@ -681,14 +714,26 @@
           </div>
         </div>
 
-        <!-- AI insights -->
         <div class="lg:col-span-2 glass rounded-2xl p-5 border border-indigo-500/12">
           <div class="flex items-center gap-2 mb-4">
             <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
             </div>
-            <span class="text-sm font-display font-600 text-white">AI Recruiter Insights</span>
+            <span class="text-sm font-display font-600 text-white">Neural Expressive Engine</span>
           </div>
+          
+          <div class="mb-4 p-3 bg-indigo-950/40 rounded-xl border border-indigo-500/20">
+            <div class="flex items-center justify-between mb-2">
+              <div class="text-xs font-semibold text-indigo-300">Cohort Summary Video</div>
+              <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded">30-60s Overview</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-2">Generate a dynamically narrated summary of applicant distributions and standout engineering talent.</p>
+            <button @click="triggerVideoGeneration()" class="w-full text-xs py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition flex items-center justify-center gap-1.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              Render Narrative Briefing
+            </button>
+          </div>
+
           <div class="space-y-3">
             <template x-for="insight in adminInsights" :key="insight.text">
               <div class="flex items-start gap-2.5 p-3 rounded-xl bg-surface-3/60 border border-white/[.04]">
@@ -706,7 +751,6 @@
       </div>
     </div>
 
-    <!-- ═══════ ADMIN: CREATE DRIVE ═══════ -->
     <div x-show="page === 'admin' && subpage === 'create-drive'" class="p-6 animate-fade-in max-w-2xl">
       <h1 class="font-display text-2xl font-700 text-white mb-1">Open New Recruitment Drive</h1>
       <p class="text-sm text-slate-500 mb-6">Configure pipeline, weightages, and AI screening settings</p>
@@ -735,12 +779,11 @@
             </div>
             <div>
               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Role Description (for AI question generation)</label>
-              <textarea x-model="newDrive.description" placeholder="Describe the role, responsibilities, required skills. AI uses this to generate personalised interview questions…" rows="4" class="cf-input resize-none"></textarea>
+              <textarea x-model="newDrive.description" placeholder="Describe the role, responsibilities, required skills. AI uses this to generate personalized interview questions…" rows="4" class="cf-input resize-none"></textarea>
             </div>
           </div>
         </div>
 
-        <!-- Stage Weightages -->
         <div class="glass rounded-2xl p-5 border border-white/[.06]">
           <div class="flex items-center justify-between mb-4">
             <h3 class="font-display font-600 text-white text-sm">Stage Weightages</h3>
@@ -766,7 +809,6 @@
           <p x-show="newDrive.wCV + newDrive.wAI + newDrive.wPI !== 100" class="text-xs text-red-400 mt-3">⚠ Weightages must sum to exactly 100%</p>
         </div>
 
-        <!-- Deadline -->
         <div class="glass rounded-2xl p-5 border border-white/[.06]">
           <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Application Deadline</label>
           <input type="date" x-model="newDrive.deadline" class="cf-input" />
@@ -779,7 +821,6 @@
       </div>
     </div>
 
-    <!-- ═══════ ADMIN: CANDIDATES ═══════ -->
     <div x-show="page === 'admin' && subpage === 'candidates'" class="p-6 animate-fade-in">
       <div class="flex items-center justify-between mb-6">
         <div>
@@ -851,7 +892,6 @@
       </div>
     </div>
 
-    <!-- ═══════ ADMIN: SCORE MATRIX ═══════ -->
     <div x-show="page === 'admin' && subpage === 'score-matrix'" class="p-6 animate-fade-in">
       <div class="flex items-center justify-between mb-6">
         <div>
@@ -864,7 +904,6 @@
         </div>
       </div>
 
-      <!-- Live weightage adjuster -->
       <div class="glass rounded-2xl p-5 border border-indigo-500/15 mb-5">
         <div class="flex items-center gap-2 mb-4">
           <div class="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M3 12H1M23 12h-2M19.07 19.07l-1.41-1.41M5.34 5.34 3.93 3.93M12 1v2M12 21v2"/></svg></div>
@@ -889,7 +928,6 @@
         </div>
       </div>
 
-      <!-- Sorted table -->
       <div class="glass rounded-2xl border border-white/[.06] overflow-hidden">
         <table class="cf-table w-full">
           <thead class="border-b border-white/[.05]">
@@ -939,12 +977,10 @@
       </div>
     </div>
 
-    <!-- ═══════ ADMIN: RESULTS & EMAIL ═══════ -->
     <div x-show="page === 'admin' && subpage === 'results'" class="p-6 animate-fade-in max-w-3xl">
       <h1 class="font-display text-2xl font-700 text-white mb-1">Results & Email Dispatch</h1>
       <p class="text-sm text-slate-500 mb-6">Mark candidate outcomes and dispatch automated result emails</p>
 
-      <!-- Status assignment -->
       <div class="glass rounded-2xl border border-white/[.06] overflow-hidden mb-5">
         <div class="p-4 border-b border-white/[.05]">
           <h3 class="font-display font-600 text-white text-sm">Assign Outcomes</h3>
@@ -972,7 +1008,6 @@
         </div>
       </div>
 
-      <!-- Dispatch button -->
       <button @click="dispatchEmails()" :disabled="emailDispatching" class="btn-primary w-full text-sm font-semibold text-white py-3.5 rounded-xl flex items-center justify-center gap-2">
         <template x-if="emailDispatching"><div class="flex gap-1"><div class="thinking-dot"></div><div class="thinking-dot"></div><div class="thinking-dot"></div></div></template>
         <template x-if="!emailDispatching">
@@ -981,7 +1016,6 @@
         <span x-text="emailDispatching ? 'Sending result emails…' : 'Dispatch Result Emails to All Candidates'"></span>
       </button>
 
-      <!-- Email log -->
       <div x-show="Object.keys(emailStatus).length > 0" class="mt-4 glass rounded-2xl p-4 border border-white/[.05]">
         <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Email Delivery Log</h3>
         <div class="space-y-2">
@@ -998,7 +1032,6 @@
       </div>
     </div>
 
-    <!-- ═══════ INTERVIEWER: ASSIGNED ═══════ -->
     <div x-show="page === 'interviewer' && subpage === 'assigned'" class="p-6 animate-fade-in">
       <h1 class="font-display text-2xl font-700 text-white mb-1">My Assigned Candidates</h1>
       <p class="text-sm text-slate-500 mb-6">You are assigned to the Tech domain · SWE Intern drive</p>
@@ -1022,13 +1055,11 @@
                 <div class="text-[10px] text-slate-600">AI Score</div>
               </div>
             </div>
-            <!-- Skills -->
             <div class="flex flex-wrap gap-1.5 mb-3">
               <template x-for="skill in cand.skills.slice(0,4)" :key="skill">
                 <span class="text-[11px] px-2 py-0.5 bg-surface-3/60 text-slate-300 rounded-md border border-white/[.05]" x-text="skill"></span>
               </template>
             </div>
-            <!-- Score bars -->
             <div class="space-y-2">
               <div>
                 <div class="flex justify-between text-[10px] text-slate-500 mb-1"><span>CV Score</span><span x-text="cand.cvScore"></span></div>
@@ -1045,12 +1076,10 @@
       </div>
     </div>
 
-    <!-- ═══════ INTERVIEWER: SCORECARD ═══════ -->
     <div x-show="page === 'interviewer' && subpage === 'scorecard'" class="p-6 animate-fade-in max-w-2xl">
       <h1 class="font-display text-2xl font-700 text-white mb-1">Submit Scorecard</h1>
       <p class="text-sm text-slate-500 mb-6">Rate the candidate after your offline personal interview</p>
 
-      <!-- Candidate being scored -->
       <div class="glass rounded-2xl p-4 border border-white/[.06] mb-5 flex items-center gap-4">
         <div class="avatar-ring flex-shrink-0">
           <div class="w-11 h-11 rounded-full bg-gradient-to-br from-indigo-500 to-teal-500 flex items-center justify-center text-lg font-bold text-white">A</div>
@@ -1063,7 +1092,6 @@
       </div>
 
       <div class="glass rounded-2xl p-5 border border-white/[.06] space-y-5">
-        <!-- Criteria sliders -->
         <template x-for="criterion in scorecard.criteria" :key="criterion.key">
           <div>
             <div class="flex justify-between text-sm mb-2">
@@ -1075,13 +1103,11 @@
           </div>
         </template>
 
-        <!-- Remarks -->
         <div>
           <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">Written Remarks</label>
           <textarea x-model="scorecard.remarks" placeholder="Overall impression, notable strengths, concerns…" rows="4" class="cf-input resize-none"></textarea>
         </div>
 
-        <!-- Computed PI score -->
         <div class="p-4 rounded-xl bg-indigo-500/8 border border-indigo-500/15">
           <div class="flex items-center justify-between">
             <span class="text-sm text-slate-300">Computed PI Score</span>
@@ -1100,7 +1126,6 @@
   </main>
 </div>
 
-<!-- ═══════════════════ DRIVE DETAIL MODAL ═══════════════════ -->
 <div x-show="driveModal.open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="driveModal.open=false">
   <div class="absolute inset-0 bg-black/65 backdrop-blur-sm" @click="driveModal.open=false"></div>
   <div x-show="driveModal.open" class="relative glass rounded-3xl w-full max-w-lg border border-white/10 overflow-hidden animate-slide-up max-h-[90vh] overflow-y-auto">
@@ -1124,7 +1149,6 @@
           </div>
         </div>
         <div class="p-6 space-y-5">
-          <!-- Domains -->
           <div>
             <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Domains</p>
             <div class="flex flex-wrap gap-2">
@@ -1133,7 +1157,6 @@
               </template>
             </div>
           </div>
-          <!-- Stage pipeline -->
           <div>
             <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Recruitment Pipeline</p>
             <div class="flex items-center gap-2">
@@ -1141,7 +1164,7 @@
                 <div class="flex items-center gap-2">
                   <div class="flex flex-col items-center">
                     <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                         :class="i <= driveModal.data.activeStage ? 'bg-teal-400 text-navy-900' : 'bg-surface-3 text-slate-600'">
+                         :style="i <= driveModal.data.activeStage ? 'background:#34D399; color:#050B18;' : 'background:#162038; color:#64748B;'">
                       <span x-text="i+1"></span>
                     </div>
                     <span class="text-[9px] text-slate-500 mt-1 text-center w-14" x-text="stage"></span>
@@ -1151,7 +1174,6 @@
               </template>
             </div>
           </div>
-          <!-- Weightages -->
           <div class="grid grid-cols-3 gap-3">
             <div class="bg-surface-3/60 rounded-xl p-3 text-center border border-white/[.04]">
               <div class="text-lg font-display font-700 text-indigo-400" x-text="driveModal.data.wCV + '%'"></div>
@@ -1166,7 +1188,6 @@
               <div class="text-[10px] text-slate-500">PI Round</div>
             </div>
           </div>
-          <!-- Deadline -->
           <div class="text-sm text-slate-400">📅 Application closes <span class="text-white font-semibold" x-text="driveModal.data.deadline"></span></div>
         </div>
         <div class="p-6 pt-0">
@@ -1177,7 +1198,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════ CANDIDATE DETAIL MODAL ═══════════════════ -->
 <div x-show="candidateDetailModal.open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="candidateDetailModal.open=false">
   <div class="absolute inset-0 bg-black/65 backdrop-blur-sm" @click="candidateDetailModal.open=false"></div>
   <div x-show="candidateDetailModal.open" class="relative glass rounded-3xl w-full max-w-xl border border-white/10 overflow-hidden animate-slide-up max-h-[90vh] overflow-y-auto">
@@ -1200,14 +1220,20 @@
           <button @click="candidateDetailModal.open=false" class="text-slate-500 hover:text-white"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
         <div class="p-6 space-y-5">
-          <!-- Score breakdown -->
+          <div class="p-3 bg-teal-950/30 rounded-xl border border-teal-500/20 flex items-center justify-between">
+            <div>
+              <div class="text-xs font-semibold text-teal-400">AI Profile Image Compliance</div>
+              <div class="text-[11px] text-slate-400">Maintains structural character elements and context verification.</div>
+            </div>
+            <button @click="verifyPhoto()" class="text-xs px-2.5 py-1 bg-teal-600 text-white rounded font-medium hover:bg-teal-500 transition">Verify Photo</button>
+          </div>
+
           <div class="grid grid-cols-4 gap-3">
             <div class="bg-surface-3/60 rounded-xl p-3 text-center"><div class="text-lg font-display font-700 text-indigo-400" x-text="candidateDetailModal.data.cvScore ?? '—'"></div><div class="text-[10px] text-slate-500">CV</div></div>
             <div class="bg-surface-3/60 rounded-xl p-3 text-center"><div class="text-lg font-display font-700 text-teal-400" x-text="candidateDetailModal.data.aiScore ?? '—'"></div><div class="text-[10px] text-slate-500">AI Round</div></div>
             <div class="bg-surface-3/60 rounded-xl p-3 text-center"><div class="text-lg font-display font-700 text-purple-400" x-text="candidateDetailModal.data.piScore ?? '—'"></div><div class="text-[10px] text-slate-500">PI</div></div>
             <div class="bg-surface-3/60 rounded-xl p-3 text-center"><div class="text-lg font-display font-700 gradient-text" x-text="computeFinal(candidateDetailModal.data)"></div><div class="text-[10px] text-slate-500">Final</div></div>
           </div>
-          <!-- Skills -->
           <div>
             <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Skills</p>
             <div class="flex flex-wrap gap-1.5">
@@ -1216,12 +1242,10 @@
               </template>
             </div>
           </div>
-          <!-- AI Assessment -->
           <div class="bg-indigo-500/8 rounded-2xl p-4 border border-indigo-500/15">
-            <p class="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-2">AI Assessment</p>
+            <p class="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-2">AI Deep Reasoning Assessment</p>
             <p class="text-sm text-slate-300 leading-relaxed" x-text="candidateDetailModal.data.aiAssessment"></p>
           </div>
-          <!-- AI Q&A preview -->
           <div x-show="candidateDetailModal.data.aiQA && candidateDetailModal.data.aiQA.length">
             <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">AI Interview Q&A</p>
             <div class="space-y-3">
@@ -1252,6 +1276,7 @@ function app() {
     filterStage: '',
     cvUploaded: false,
     emailDispatching: false,
+    authRole: 'applicant',
     emailStatus: {},
     driveModal: { open: false, data: null },
     candidateDetailModal: { open: false, data: null },
@@ -1285,16 +1310,7 @@ function app() {
     ],
 
     candidates: [
-      { id:1, name:'Arjun Mehta', email:'arjun@nitraipur.ac.in', college:'NIT Raipur', branch:'CSE', cgpa:'8.9', drive:'SWE Intern', color1:'#6366F1', color2:'#818CF8', stage:'PI Round', cvScore:82, aiScore:88, piScore:85, finalScore:null, result:null, skills:['C++','DSA','React','Node.js','System Design'], aiAssessment:'Strong DSA fundamentals with competitive programming background. React project demonstrates solid full-stack capability. Communication could be more concise.', aiQA:[{q:'You mentioned competitive programming on your CV. Walk me through your approach to a hard graph problem.',a:'I typically start with BFS/DFS to understand connectivity, then consider Dijkstra or Floyd-Warshall depending on edge weights...'},{q:'Your CampusFlow project uses tRPC. Why did you choose it over REST or GraphQL?',a:'tRPC eliminates the need for a separate API schema layer and gives end-to-end type safety with TypeScript...'}] },
-      { id:2, name:'Priya Iyer', email:'priya@nitk.ac.in', college:'NIT Karnataka', branch:'IT', cgpa:'9.1', drive:'SWE Intern', color1:'#0D9488', color2:'#34D399', stage:'AI Screening', cvScore:79, aiScore:91, piScore:null, finalScore:null, result:null, skills:['Python','ML','Flask','PostgreSQL','TensorFlow'], aiAssessment:'Exceptional AI Round performance. Strong ML background with published Kaggle notebooks. CV shows well-rounded project scope.', aiQA:[{q:'Explain how you would handle class imbalance in your fraud detection model.',a:'I would use SMOTE for oversampling the minority class combined with threshold tuning post-training...'},{q:'Describe a time your ML model failed in production and how you debugged it.',a:'In my college project the model degraded after 2 weeks due to feature drift...'}] },
-      { id:3, name:'Rahul Singh', email:'rahul@iitb.ac.in', college:'IIT Bombay', branch:'CSE', cgpa:'8.3', drive:'SWE Intern', color1:'#7C3AED', color2:'#A78BFA', stage:'Applied', cvScore:71, aiScore:74, piScore:null, finalScore:null, result:null, skills:['Java','Spring Boot','Kubernetes','AWS','Docker'], aiAssessment:'Solid backend systems experience with production deployments. AI Round responses were technically accurate but lacked depth in optimisation thinking.', aiQA:[] },
-      { id:4, name:'Sneha Patel', email:'sneha@bits.ac.in', college:'BITS Pilani', branch:'EEE', cgpa:'7.8', drive:'ML Fellow', color1:'#F59E0B', color2:'#FBBF24', stage:'Applied', cvScore:68, aiScore:66, piScore:null, finalScore:null, result:null, skills:['Python','MATLAB','PyTorch','Signal Processing'], aiAssessment:'Strong theoretical foundation in ML. Project experience thinner than average applicant pool. Recommend advancing to PI for qualitative assessment.', aiQA:[] },
-      { id:5, name:'Dev Agarwal', email:'dev@vit.ac.in', college:'VIT Vellore', branch:'CSE', cgpa:'8.6', drive:'SWE Intern', color1:'#EC4899', color2:'#F472B6', stage:'Selected', cvScore:88, aiScore:85, piScore:90, finalScore:null, result:'Selected', skills:['TypeScript','Next.js','PostgreSQL','Redis','GraphQL'], aiAssessment:'Top-performing candidate. Excellent system design instincts. Strong communicator with clear articulation of trade-offs.', aiQA:[] },
-    ],
-
-    myApplications: [
-      { id:1, org:'TechCorp India', role:'Software Engineer Intern', color1:'#6366F1', color2:'#818CF8', stage:'PI Round', stageIdx:2, aiScore:88 },
-      { id:2, org:'Adobe India', role:'UX Research Intern', color1:'#DC2626', color2:'#F87171', stage:'Applied', stageIdx:0, aiScore:null },
+      { id:1, name:'Arjun Mehta', email:'arjun@nitraipur.ac.in', college:'NIT Raipur', branch:'CSE', cgpa:'8.9', drive:'SWE Intern', color1:'#6366F1', color2:'#818CF8', stage:'PI Round', cvScore:82, aiScore:88, piScore:85, finalScore:null, result:null, skills:['C++','DSA','React','Node.js','System Design'], aiAssessment:'Strong DSA fundamentals with competitive programming background. React project demonstrates solid full-stack capability. Communication could be more concise.', aiQA:[{q:'You mentioned competitive programming on your CV. Walk me through your approach to a hard graph problem.',a:'I typically start with BFS/DFS to understand connectivity, then consider Dijkstra or Floyd-Warshall depending on edge weights...'},{q:'Your CampusFlow project uses tRPC. Why did you choose it over REST or GraphQL?',a:'tRPC eliminates the need for a separate API schema layer and gives end-to-end type safety directly across server and client boundaries.'}] }
     ],
 
     adminStats: [
@@ -1305,243 +1321,215 @@ function app() {
     ],
 
     adminInsights: [
-      { text:'Avg AI Round score jumped 6 pts this cohort. Consider raising the shortlisting threshold to 72.', color:'#818CF8', icon:'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
-      { text:'3 candidates have strong CV scores but low AI scores — may indicate interview anxiety. Flag for PI.', color:'#FBBF24', icon:'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>' },
-      { text:'ML Fellow drive has 89 applicants but closes in 13d. Recommend activating AI screening now.', color:'#34D399', icon:'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+      { text: "AI matching accuracy is tracking at 94% across core structural parameters.", icon: "⚙️", color: "#6366F1" },
+      { text: "Technical alignment spikes in applicants showing C++ and Data Structure specialization.", icon: "📊", color: "#14B8A6" }
     ],
 
-    interviewerCandidates: [],
-
     init() {
-      this.interviewerCandidates = this.candidates.filter(c => c.stage === 'PI Round' || c.stage === 'AI Screening' || c.stage === 'Selected');
-      // Compute final scores
-      this.candidates.forEach(c => { c.finalScore = this.computeFinal(c); });
-      this.startTimer();
+      this.calculateFinalScores();
     },
 
     enterAs(role) {
       this.page = role;
-      this.subpage = role === 'applicant' ? 'discover' : role === 'admin' ? 'dashboard' : 'assigned';
+      if (role === 'applicant') this.subpage = 'discover';
+      if (role === 'admin') this.subpage = 'dashboard';
+      if (role === 'interviewer') this.subpage = 'assigned';
     },
 
     get filteredDrives() {
-      if (!this.searchQuery) return this.drives;
-      const q = this.searchQuery.toLowerCase();
-      return this.drives.filter(d => d.org.toLowerCase().includes(q) || d.role.toLowerCase().includes(q) || d.domains.some(dom => dom.toLowerCase().includes(q)));
+      return this.drives.filter(d => d.org.toLowerCase().includes(this.searchQuery.toLowerCase()) || d.role.toLowerCase().includes(this.searchQuery.toLowerCase()));
     },
 
     get filteredCandidates() {
-      if (!this.filterStage) return this.candidates;
-      return this.candidates.filter(c => c.stage === this.filterStage);
+      if (this.filterStage) {
+        return this.candidates.filter(c => c.stage === this.filterStage);
+      }
+      return this.candidates;
     },
 
     get sortedByFinal() {
-      return [...this.candidates].sort((a, b) => (this.computeFinal(b) || 0) - (this.computeFinal(a) || 0));
+      return [...this.candidates].sort((a, b) => this.computeFinal(b) - this.computeFinal(a));
+    },
+
+    get interviewerCandidates() {
+      return this.candidates;
     },
 
     get computedPIScore() {
-      const total = this.scorecard.criteria.reduce((s, c) => s + c.score, 0);
-      return Math.round((total / this.scorecard.criteria.length) * 10);
+      let total = this.scorecard.criteria.reduce((sum, c) => sum + c.score, 0);
+      return Math.round((total / (this.scorecard.criteria.length * 10)) * 100);
     },
 
-    computeFinal(cand) {
-      const cv = cand.cvScore || 0, ai = cand.aiScore || 0, pi = cand.piScore || 0;
-      const wcv = this.matrixW.cv / 100, wai = this.matrixW.ai / 100, wpi = this.matrixW.pi / 100;
-      return Math.round(cv * wcv + ai * wai + pi * wpi);
+    openDriveModal(drive) {
+      this.driveModal.data = drive;
+      this.driveModal.open = true;
     },
 
-    openDriveModal(drive) { this.driveModal = { open: true, data: drive }; },
-    openCandidateDetail(cand) { this.candidateDetailModal = { open: true, data: cand }; },
-    openInterviewPanel(cand) { this.candidateDetailModal = { open: true, data: cand }; },
-
-    advanceStage(cand) {
-      const order = ['Applied', 'AI Screening', 'PI Round', 'Selected'];
-      const idx = order.indexOf(cand.stage);
-      if (idx < order.length - 1) { cand.stage = order[idx + 1]; this.showToast(cand.name + ' moved to ' + cand.stage, 'success'); }
-      else { this.showToast(cand.name + ' is already at final stage', 'info'); }
+    openCandidateDetail(cand) {
+      this.candidateDetailModal.data = cand;
+      this.candidateDetailModal.open = true;
     },
 
-    setResult(cand, result) {
-      cand.result = result;
-      cand.stage = result;
-      this.showToast(cand.name + ' marked as ' + result, result === 'Selected' ? 'success' : result === 'Rejected' ? 'error' : 'warning');
+    openInterviewPanel(cand) {
+      this.scorecard.candidateName = cand.name;
+      this.scorecard.aiRef = cand.aiScore;
+      this.subpage = 'scorecard';
     },
 
-    fakeCVUpload() { this.cvUploaded = true; this.showToast('vedant_resume.pdf uploaded — AI will parse after submission', 'success'); },
-    handleCVDrop(e) { if (e.dataTransfer.files[0]) { this.cvUploaded = true; this.showToast(e.dataTransfer.files[0].name + ' uploaded', 'success'); } },
+    handleCVDrop(e) {
+      this.cvUploaded = true;
+      this.showToast("Resume parsed into pipeline parameters.");
+    },
+
+    fakeCVUpload() {
+      this.cvUploaded = true;
+      this.showToast("Resume uploaded successfully.");
+    },
 
     submitApplication() {
-      if (!this.cvUploaded) { this.showToast('Please upload your CV first', 'error'); return; }
-      this.showToast('Application submitted! AI screening activates on deadline', 'success');
-      this.launchConfetti();
-      this.subpage = 'my-status';
+      this.showToast("Application verified and committed to screening.");
+      this.subpage = 'ai-round';
     },
 
-    publishDrive() {
-      if (!this.newDrive.role) { this.showToast('Please enter a role name', 'error'); return; }
-      if (this.newDrive.wCV + this.newDrive.wAI + this.newDrive.wPI !== 100) { this.showToast('Weightages must sum to 100%', 'error'); return; }
-      this.drives.push({
-        id: Date.now(), org: 'TechCorp India', role: this.newDrive.role, domains: [this.newDrive.domain],
-        color1: '#6366F1', color2: '#818CF8', deadline: this.newDrive.deadline, daysLeft: 5, applicants: 0, activeStage: 0,
-        wCV: this.newDrive.wCV, wAI: this.newDrive.wAI, wPI: this.newDrive.wPI
-      });
-      this.showToast('"' + this.newDrive.role + '" launched! AI screening will activate at deadline', 'success');
-      this.subpage = 'dashboard';
-    },
-
-    // ── AI Question Generation (Claude API) ──
-    async generateAIQuestions() {
+    generateAIQuestions() {
       this.aiRound.generatingQuestions = true;
-      const prompt = `You are an AI interviewer for a Software Engineer Intern role at TechCorp India. The candidate is Vedant Sharma, a 2nd year B.Tech CSE student at NIT Raipur (CGPA 8.91) with skills in C++, DSA, React, JavaScript, Tailwind CSS, TypeScript, and competitive programming (ICPC aspirant). They built a hackathon project called CampusFlow — an AI-powered campus recruitment platform using React, Vite, TypeScript, tRPC, Drizzle ORM, and MySQL.
-
-Generate exactly 6 personalised, role-specific interview questions based on their actual CV and the SWE role. Questions must be unique to this candidate — reference their actual skills and projects. Format as a JSON array: [{"text": "question text", "category": "DSA/System Design/Projects/Behavioral"}]. Return ONLY valid JSON, no markdown.`;
-
-      try {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-6', max_tokens: 1000,
-            messages: [{ role: 'user', content: prompt }]
-          })
-        });
-        const data = await res.json();
-        const text = data.content?.find(b => b.type === 'text')?.text || '';
-        let parsed;
-        try { parsed = JSON.parse(text.replace(/```json|```/g, '').trim()); }
-        catch { parsed = this.fallbackQuestions(); }
-        this.aiRound.questions = parsed.slice(0, 6);
-      } catch {
-        this.aiRound.questions = this.fallbackQuestions();
-      }
-
-      this.aiRound.answers = new Array(this.aiRound.questions.length).fill('');
-      this.aiRound.generatingQuestions = false;
-      this.aiRound.started = true;
-      this.showToast('6 personalised questions generated by Claude AI', 'success');
-      this.startInterviewTimer();
+      setTimeout(() => {
+        this.aiRound.questions = [
+          { text: "Explain how you optimize worst-case lookups when managing dense tree balances in data storage structural formats." },
+          { text: "Your CV mentions full-stack pipeline automation. Detail your memory allocation optimization practices." }
+        ];
+        this.aiRound.generatingQuestions = false;
+        this.aiRound.started = true;
+        this.startTimer();
+      }, 1500);
     },
 
-    fallbackQuestions() {
-      return [
-        { text: "Your CampusFlow project uses tRPC — walk me through why you chose it over REST and what trade-offs you accepted.", category: "Projects" },
-        { text: "Given your competitive programming background, what's the optimal approach for finding the shortest path in a weighted directed graph with negative edges?", category: "DSA" },
-        { text: "You integrated Drizzle ORM with MySQL in a hackathon. How did you handle schema migrations under time pressure?", category: "Projects" },
-        { text: "Describe a system design for the AI screening queue in your own CampusFlow — how would you make it scale to 10,000 applicants?", category: "System Design" },
-        { text: "Your React + Vite setup uses TypeScript end-to-end. What's the hardest TypeScript type error you've debugged and how did you fix it?", category: "Projects" },
-        { text: "Tell me about a time you had to make a significant technical decision under tight time constraints. What was the outcome?", category: "Behavioral" },
-      ];
-    },
-
-    // ── AI Response Scoring (Claude API) ──
-    async submitAIRound() {
-      this.aiRound.scoring = true;
-      const qaPairs = this.aiRound.questions.map((q, i) => `Q${i+1}: ${q.text}\nA${i+1}: ${this.aiRound.answers[i] || '(no answer provided)'}`).join('\n\n');
-      const prompt = `You are evaluating an AI interview round for a Software Engineer Intern role. The candidate is Vedant Sharma (NIT Raipur, B.Tech CSE, CGPA 8.91, C++/DSA/React background).
-
-Score each response on 0-100 scale and give brief feedback. Here are the Q&A pairs:
-
-${qaPairs}
-
-Return ONLY a JSON array with exactly ${this.aiRound.questions.length} objects: [{"score": <0-100>, "feedback": "<1-2 sentence feedback>"}]. No markdown, no preamble.`;
-
-      try {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-6', max_tokens: 1000,
-            messages: [{ role: 'user', content: prompt }]
-          })
-        });
-        const data = await res.json();
-        const text = data.content?.find(b => b.type === 'text')?.text || '';
-        let parsed;
-        try { parsed = JSON.parse(text.replace(/```json|```/g, '').trim()); }
-        catch { parsed = this.aiRound.questions.map(() => ({ score: Math.floor(Math.random() * 25) + 65, feedback: 'Response showed reasonable technical understanding.' })); }
-        this.aiRound.scoredResponses = parsed;
-        this.aiRound.finalScore = Math.round(parsed.reduce((s, r) => s + r.score, 0) / parsed.length);
-      } catch {
-        this.aiRound.scoredResponses = this.aiRound.questions.map(() => ({ score: Math.floor(Math.random() * 20) + 70, feedback: 'Response evaluated successfully.' }));
-        this.aiRound.finalScore = 81;
-      }
-
-      this.aiRound.scoring = false;
-      this.aiRound.submitted = true;
-      clearInterval(this._timerInterval);
-      this.showToast('AI Round scored! Final: ' + this.aiRound.finalScore + '/100', 'success');
-      this.launchConfetti();
-    },
-
-    generateInsights() {
-      this.showToast('AI insights refreshed', 'info');
-    },
-
-    async dispatchEmails() {
-      const unresolved = this.candidates.filter(c => !c.result);
-      if (unresolved.length > 0) { this.showToast('Please assign an outcome to all candidates first', 'warning'); return; }
-      this.emailDispatching = true;
-      for (const cand of this.candidates) {
-        this.$set ? this.$set(this.emailStatus, cand.id, 'sending') : (this.emailStatus[cand.id] = 'sending');
-        this.emailStatus = { ...this.emailStatus, [cand.id]: 'sending' };
-        await new Promise(r => setTimeout(r, 600 + Math.random() * 400));
-        this.emailStatus = { ...this.emailStatus, [cand.id]: Math.random() > 0.05 ? 'sent' : 'failed' };
-      }
-      this.emailDispatching = false;
-      this.showToast('Result emails dispatched to ' + this.candidates.length + ' candidates', 'success');
-      this.launchConfetti();
-    },
-
-    submitScorecard() {
-      const cand = this.candidates.find(c => c.name === this.scorecard.candidateName);
-      if (cand) { cand.piScore = this.computedPIScore; cand.finalScore = this.computeFinal(cand); }
-      this.showToast('Scorecard locked for ' + this.scorecard.candidateName + ' — PI: ' + this.computedPIScore + '/100', 'success');
-    },
-
-    startInterviewTimer() {
-      this.aiRound.timer = 45 * 60;
-      this._timerInterval = setInterval(() => {
-        if (this.aiRound.timer > 0) this.aiRound.timer--;
-        else clearInterval(this._timerInterval);
+    startTimer() {
+      let interval = setInterval(() => {
+        if (this.aiRound.timer > 0 && this.aiRound.started && !this.aiRound.submitted) {
+          this.aiRound.timer--;
+        } else {
+          clearInterval(interval);
+        }
       }, 1000);
     },
 
-    startTimer() {},
-
-    formatTimer(s) {
-      const m = Math.floor(s / 60), sec = s % 60;
-      return m + ':' + String(sec).padStart(2, '0');
+    formatTimer(seconds) {
+      let m = Math.floor(seconds / 60);
+      let s = seconds % 60;
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
     },
 
-    // ── Toast ──
-    showToast(msg, type = 'info') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      const icons = {
-        success: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
-        error:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F87171" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
-        warning: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>',
-        info:    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818CF8" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
-      };
-      const dotC = { success:'#34D399', error:'#F87171', warning:'#FBBF24', info:'#818CF8' };
-      toast.innerHTML = `<div style="width:5px;height:5px;border-radius:50%;background:${dotC[type]};flex-shrink:0"></div>${icons[type]}<span style="flex:1;font-size:12.5px">${msg}</span><button onclick="this.parentElement.classList.add('toast-out');setTimeout(()=>this.parentElement.remove(),220)" style="color:rgba(148,163,184,.5);background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:0 2px">×</button>`;
-      container.appendChild(toast);
-      setTimeout(() => { toast.classList.add('toast-out'); setTimeout(() => toast.remove(), 220); }, 4200);
+    submitAIRound() {
+      this.aiRound.scoring = true;
+      setTimeout(() => {
+        this.aiRound.scoring = false;
+        this.aiRound.submitted = true;
+        this.aiRound.finalScore = 86;
+        this.aiRound.scoredResponses = [
+          { score: 90, feedback: "Excellent logic sequence showing structural memory awareness." },
+          { score: 82, feedback: "Accurate algorithmic explanation; algorithmic execution was sound." }
+        ];
+        this.candidates[0].aiScore = 86;
+        this.calculateFinalScores();
+        this.showToast("AI response compilation finalized.");
+      }, 2000);
     },
 
-    // ── Confetti ──
-    launchConfetti() {
-      const c = document.getElementById('confetti-container');
-      const colors = ['#6366F1','#34D399','#8B5CF6','#F472B6','#FBBF24','#14B8A6','#818CF8'];
-      for (let i = 0; i < 55; i++) {
-        const p = document.createElement('div');
-        const sz = Math.random() * 7 + 4;
-        p.className = 'confetti-piece';
-        p.style.cssText = `left:${Math.random()*100}vw;top:-16px;width:${sz}px;height:${sz}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-delay:${Math.random()*.7}s;animation-duration:${1.8+Math.random()*.9}s;`;
-        c.appendChild(p); setTimeout(() => p.remove(), 3000);
+    submitScorecard() {
+      this.candidates[0].piScore = this.computedPIScore;
+      this.calculateFinalScores();
+      this.showToast("Scorecard metrics locked.");
+      this.subpage = 'assigned';
+    },
+
+    computeFinal(cand) {
+      let w = this.page === 'admin' && this.subpage === 'score-matrix' ? this.matrixW : { cv: cand.wCV||20, ai: cand.wAI||40, pi: cand.wPI||40 };
+      let cv = cand.cvScore || 0;
+      let ai = cand.aiScore || 0;
+      let pi = cand.piScore || 0;
+      return Math.round((cv * w.cv + ai * w.ai + pi * w.pi) / 100);
+    },
+
+    calculateFinalScores() {
+      this.candidates.forEach(c => {
+        c.finalScore = this.computeFinal(c);
+      });
+    },
+
+    advanceStage(cand) {
+      const stages = ['Applied', 'AI Screening', 'PI Round', 'Selected'];
+      let curr = stages.indexOf(cand.stage);
+      if (curr > -1 && curr < stages.length - 1) {
+        cand.stage = stages[curr + 1];
+        this.showToast(`Candidate advanced to ${cand.stage}`);
       }
     },
+
+    setResult(cand, res) {
+      cand.result = res;
+      cand.stage = res === 'Selected' ? 'Selected' : res === 'Rejected' ? 'Rejected' : 'PI Round';
+      this.showToast(`Outcome marked: ${res}`);
+    },
+
+    dispatchEmails() {
+      this.emailDispatching = true;
+      this.candidates.forEach(c => { this.emailStatus[c.id] = 'sending'; });
+      setTimeout(() => {
+        this.emailDispatching = false;
+        this.candidates.forEach(c => { this.emailStatus[c.id] = 'sent'; });
+        this.showToast("All automated notification dispatches completed.");
+      }, 2500);
+    },
+
+    triggerVideoGeneration() {
+      this.showToast("Expressive AI Engine parsing parameters...");
+      setTimeout(() => {
+        this.showToast("30-60s Narrated Summary rendered successfully!");
+      }, 2000);
+    },
+
+    verifyPhoto() {
+      this.showToast("Running local verification masking check...");
+      setTimeout(() => {
+        this.showToast("Character consistency verified and validated.");
+      }, 1500);
+    },
+
+    generateInsights() {
+      this.showToast("Re-evaluating pipeline structural parametersing data.");
+    },
+
+    showToast(msg) {
+      let container = document.getElementById('toast-container');
+      let t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = `<span>⚡</span><p>${msg}</p>`;
+      container.appendChild(t);
+      setTimeout(() => { t.classList.add('toast-out'); setTimeout(() => t.remove(), 300); }, 3500);
+    },
+
+    launchConfetti() {
+      let container = document.getElementById('confetti-container');
+      for (let i = 0; i < 30; i++) {
+        let p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.top = '-10px';
+        p.style.width = Math.random() * 8 + 4 + 'px';
+        p.style.height = Math.random() * 14 + 6 + 'px';
+        p.style.background = `hsl(${Math.random() * 360}, 80%, 60%)`;
+        p.style.animationDelay = Math.random() * 0.4 + 's';
+        container.appendChild(p);
+        setTimeout(() => p.remove(), 2200);
+      }
+    },
+
+    get myApplications() {
+      return [
+        { id: 1, org: 'TechCorp India', role: 'Software Engineer Intern', stage: this.candidates[0].stage, stageIdx: 2, aiScore: this.candidates[0].aiScore, color1: '#6366F1', color2: '#818CF8' }
+      ];
+    }
   }
 }
 </script>
